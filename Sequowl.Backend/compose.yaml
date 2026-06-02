@@ -1,0 +1,13 @@
+﻿services:
+  grpcservice1:
+    image: grpcservice1
+    build:
+      context: .
+      dockerfile: GrpcService1/Dockerfile
+
+  sequowl.grpc:
+    image: sequowl.grpc
+    build:
+      context: .
+      dockerfile: Sequowl.gRPC/Dockerfile
+
