@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sYRehfDCmPo=",
+  "dgSpecHash": "bxT1id3TlKI=",
   "success": true,
-  "projectFilePath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/Sequowl.Host.csproj",
+  "projectFilePath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Client/Sequowl.Client.csproj",
   "expectedPackageFiles": [
     "/home/john/.nuget/packages/google.protobuf/3.27.0/google.protobuf.3.27.0.nupkg.sha512",
     "/home/john/.nuget/packages/grpc.aspnetcore/2.64.0/grpc.aspnetcore.2.64.0.nupkg.sha512",

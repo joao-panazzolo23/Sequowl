@@ -135,6 +135,16 @@
           "build/Grpc.Tools.props": {},
           "build/Grpc.Tools.targets": {}
         }
+      },
+      "Sequowl.gRPC.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Sequowl.gRPC.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Sequowl.gRPC.Contracts.dll": {}
+        }
       }
     }
   },
@@ -384,11 +394,17 @@
         "tools/windows_x86/grpc_csharp_plugin.exe",
         "tools/windows_x86/protoc.exe"
       ]
+    },
+    "Sequowl.gRPC.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Sequowl.gRPC.Contracts/Sequowl.gRPC.Contracts.csproj",
+      "msbuildProject": "../Sequowl.gRPC.Contracts/Sequowl.gRPC.Contracts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Grpc.AspNetCore >= 2.64.0"
+      "Grpc.AspNetCore >= 2.64.0",
+      "Sequowl.gRPC.Contracts >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -397,11 +413,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/Sequowl.Host.csproj",
-      "projectName": "Sequowl.Host",
-      "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/Sequowl.Host.csproj",
+      "projectUniqueName": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Client/Sequowl.Client.csproj",
+      "projectName": "Sequowl.Client",
+      "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Client/Sequowl.Client.csproj",
       "packagesPath": "/home/john/.nuget/packages/",
-      "outputPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/obj/",
+      "outputPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Client/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/john/.nuget/NuGet/NuGet.Config"
@@ -416,7 +432,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.gRPC.Contracts/Sequowl.gRPC.Contracts.csproj": {
+              "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.gRPC.Contracts/Sequowl.gRPC.Contracts.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

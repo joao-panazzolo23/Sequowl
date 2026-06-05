@@ -12,19 +12,18 @@ message SqlExecutionRequest{
 
 message SqlExecutionResponse{
   double UpdatedLines = 1;
-  repeated google.protobuf.Any data = 2; //equivalent to dynamic
+  repeated google.protobuf.Any Data = 2; //equivalent to dynamic
   double TimeElapsed = 3; //equivalent to dynamic
   //that's the code usage
   //  Data = Any.Pack(new User
   //  {
   //  Name = "João"
   //  })
-
 }
 
-//    oneof result {
-//int32 user = 1;
+//oneof result {
+//    int32 user = 1;
 //    Product product = 2;
-//Order order = 3;
+//    Order order = 3;
 //    }
 

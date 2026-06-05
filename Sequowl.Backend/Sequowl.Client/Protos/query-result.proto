@@ -8,6 +8,14 @@ import "google/protobuf/timestamp.proto";
 //THIS IS PROTO's NAMESPACE
 package query_result;
 
+service ExecuteQuery{
+  rpc ExecuteQuery(QueryCommand) returns (QueryResult);
+}
+
+message QueryCommand{
+  string Sql = 1;
+}
+
 message QueryResult {
   repeated Column columns = 1;
   repeated Row rows = 2;
