@@ -397,11 +397,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.gRPC/Sequowl.gRPC.csproj",
-      "projectName": "Sequowl.gRPC",
-      "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.gRPC/Sequowl.gRPC.csproj",
+      "projectUniqueName": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/Sequowl.Host.csproj",
+      "projectName": "Sequowl.Host",
+      "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/Sequowl.Host.csproj",
       "packagesPath": "/home/john/.nuget/packages/",
-      "outputPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.gRPC/obj/",
+      "outputPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Host/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/john/.nuget/NuGet/NuGet.Config"

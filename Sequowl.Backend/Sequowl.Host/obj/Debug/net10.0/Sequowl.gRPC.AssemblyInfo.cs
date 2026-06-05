@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sequowl.gRPC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a9a188d951f5a86f057fa2f7a0b243874bd48b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sequowl.gRPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sequowl.gRPC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -7,7 +7,7 @@
 
 using grpc = global::Grpc.Core;
 
-namespace Sequowl.gRPC {
+namespace Sequowl.Host {
   /// <summary>
   /// The greeting service definition.
   /// </summary>
@@ -49,12 +49,12 @@ namespace Sequowl.gRPC {
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Sequowl.gRPC.HelloRequest> __Marshaller_greet_HelloRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Sequowl.gRPC.HelloRequest.Parser));
+    static readonly grpc::Marshaller<global::Sequowl.Host.HelloRequest> __Marshaller_greet_HelloRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Sequowl.Host.HelloRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Sequowl.gRPC.HelloReply> __Marshaller_greet_HelloReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Sequowl.gRPC.HelloReply.Parser));
+    static readonly grpc::Marshaller<global::Sequowl.Host.HelloReply> __Marshaller_greet_HelloReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Sequowl.Host.HelloReply.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Sequowl.gRPC.HelloRequest, global::Sequowl.gRPC.HelloReply> __Method_SayHello = new grpc::Method<global::Sequowl.gRPC.HelloRequest, global::Sequowl.gRPC.HelloReply>(
+    static readonly grpc::Method<global::Sequowl.Host.HelloRequest, global::Sequowl.Host.HelloReply> __Method_SayHello = new grpc::Method<global::Sequowl.Host.HelloRequest, global::Sequowl.Host.HelloReply>(
         grpc::MethodType.Unary,
         __ServiceName,
         "SayHello",
@@ -64,7 +64,7 @@ namespace Sequowl.gRPC {
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::Sequowl.gRPC.GreetReflection.Descriptor.Services[0]; }
+      get { return global::Sequowl.Host.GreetReflection.Descriptor.Services[0]; }
     }
 
     /// <summary>Base class for server-side implementations of Greeter</summary>
@@ -78,7 +78,7 @@ namespace Sequowl.gRPC {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Sequowl.gRPC.HelloReply> SayHello(global::Sequowl.gRPC.HelloRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Sequowl.Host.HelloReply> SayHello(global::Sequowl.Host.HelloRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -101,7 +101,7 @@ namespace Sequowl.gRPC {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static void BindService(grpc::ServiceBinderBase serviceBinder, GreeterBase serviceImpl)
     {
-      serviceBinder.AddMethod(__Method_SayHello, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Sequowl.gRPC.HelloRequest, global::Sequowl.gRPC.HelloReply>(serviceImpl.SayHello));
+      serviceBinder.AddMethod(__Method_SayHello, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Sequowl.Host.HelloRequest, global::Sequowl.Host.HelloReply>(serviceImpl.SayHello));
     }
 
   }

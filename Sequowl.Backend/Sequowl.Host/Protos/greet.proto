@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+//Specific code for c# code gen.
+//If this code is not provided, source gen will use Proto's namespace instead.
+option csharp_namespace = "Sequowl.Host";
+
+//THIS IS PROTO's NAMESPACE
+package greet;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply);
+
+  //RPC is a method. HelloRequest is the parameter and everything after returns is a return object
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+  string family = 2;
+}
+//Messages are our records. They store data just like any other OOP structure.
+//These numbers after them are field numbers for positional matters.
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+//double
+//float
+//int32
+//int64
+//uint32
+//uint64
+//sint32
+//sint64
+//fixed32
+//fixed64
+//sfixed32
+//sfixed64
+
+//bool
+//string
+//bytes
+
+//You can't use arrays and IEnumerable, but you can use REPEATED. 
+//It generates RepeatedField<T> datatype within source generated code.
+//But will can be used as an IEnumerable.
+//You can also use Messages inside Messages, just like a viewmodel or so. 
+
+//DateTimes must be imported to be used here, 
+// since they're not native.
+
+//import "google/protobuf/timestamp.proto";
+//message User {
+//  google.protobuf.Timestamp created_at = 1;
+//}
+
+//Empty is the equivalent to Mediator's Unit.
+//    rpc DeleteUser(DeleteUserRequest)
+//    returns (google.protobuf.Empty);
+
+// You can use Server Streaming (when server answers many objects)
+//    rpc GetLogs(LogRequest)
+//    returns (stream LogEntry);
+
+// Client Streaming (when client requests many objects) 
+//    rpc Upload(stream Chunk)
+//    returns (UploadResult);
+
+//  Bidirectional streaming ( 
+//    rpc Chat(stream ChatMessage)
+//    returns (stream ChatMessage);

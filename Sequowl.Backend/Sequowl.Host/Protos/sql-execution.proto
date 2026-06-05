@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+option csharp_namespace = "Sequowl.Host";
+
+//THIS IS PROTO's NAMESPACE
+package sql_execution;
+
+message SqlExecutionRequest{
+  string Sql = 1;
+}
+
+message SqlExecutionResponse{
+  double UpdatedLines = 1;
+  repeated google.protobuf.Any data = 2; //equivalent to dynamic
+  double TimeElapsed = 3; //equivalent to dynamic
+  //that's the code usage
+  //  Data = Any.Pack(new User
+  //  {
+  //  Name = "João"
+  //  })
+
+}
+
+//    oneof result {
+//int32 user = 1;
+//    Product product = 2;
+//Order order = 3;
+//    }
+

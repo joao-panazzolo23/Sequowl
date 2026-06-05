@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Sequowl.gRPC {
+namespace Sequowl.Host {
 
   /// <summary>Holder for reflection information generated from Protos/greet.proto</summary>
   public static partial class GreetReflection {
@@ -24,15 +24,16 @@ namespace Sequowl.gRPC {
     static GreetReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJQcm90b3MvZ3JlZXQucHJvdG8SBWdyZWV0IhwKDEhlbGxvUmVxdWVzdBIM",
-            "CgRuYW1lGAEgASgJIh0KCkhlbGxvUmVwbHkSDwoHbWVzc2FnZRgBIAEoCTI9",
-            "CgdHcmVldGVyEjIKCFNheUhlbGxvEhMuZ3JlZXQuSGVsbG9SZXF1ZXN0GhEu",
-            "Z3JlZXQuSGVsbG9SZXBseUIPqgIMU2VxdW93bC5nUlBDYgZwcm90bzM="));
+            "ChJQcm90b3MvZ3JlZXQucHJvdG8SBWdyZWV0IiwKDEhlbGxvUmVxdWVzdBIM",
+            "CgRuYW1lGAEgASgJEg4KBmZhbWlseRgCIAEoCSIdCgpIZWxsb1JlcGx5Eg8K",
+            "B21lc3NhZ2UYASABKAkyPQoHR3JlZXRlchIyCghTYXlIZWxsbxITLmdyZWV0",
+            "LkhlbGxvUmVxdWVzdBoRLmdyZWV0LkhlbGxvUmVwbHlCD6oCDFNlcXVvd2wu",
+            "SG9zdGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Sequowl.gRPC.HelloRequest), global::Sequowl.gRPC.HelloRequest.Parser, new[]{ "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Sequowl.gRPC.HelloReply), global::Sequowl.gRPC.HelloReply.Parser, new[]{ "Message" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Sequowl.Host.HelloRequest), global::Sequowl.Host.HelloRequest.Parser, new[]{ "Name", "Family" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Sequowl.Host.HelloReply), global::Sequowl.Host.HelloReply.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
     #endregion
@@ -57,7 +58,7 @@ namespace Sequowl.gRPC {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Sequowl.gRPC.GreetReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Sequowl.Host.GreetReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -78,6 +79,7 @@ namespace Sequowl.gRPC {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public HelloRequest(HelloRequest other) : this() {
       name_ = other.name_;
+      family_ = other.family_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -99,6 +101,18 @@ namespace Sequowl.gRPC {
       }
     }
 
+    /// <summary>Field number for the "family" field.</summary>
+    public const int FamilyFieldNumber = 2;
+    private string family_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Family {
+      get { return family_; }
+      set {
+        family_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -115,6 +129,7 @@ namespace Sequowl.gRPC {
         return true;
       }
       if (Name != other.Name) return false;
+      if (Family != other.Family) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -123,6 +138,7 @@ namespace Sequowl.gRPC {
     public override int GetHashCode() {
       int hash = 1;
       if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Family.Length != 0) hash ^= Family.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -145,6 +161,10 @@ namespace Sequowl.gRPC {
         output.WriteRawTag(10);
         output.WriteString(Name);
       }
+      if (Family.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Family);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -159,6 +179,10 @@ namespace Sequowl.gRPC {
         output.WriteRawTag(10);
         output.WriteString(Name);
       }
+      if (Family.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Family);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -171,6 +195,9 @@ namespace Sequowl.gRPC {
       int size = 0;
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (Family.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Family);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -186,6 +213,9 @@ namespace Sequowl.gRPC {
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
+      }
+      if (other.Family.Length != 0) {
+        Family = other.Family;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -206,6 +236,10 @@ namespace Sequowl.gRPC {
             Name = input.ReadString();
             break;
           }
+          case 18: {
+            Family = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -223,6 +257,10 @@ namespace Sequowl.gRPC {
             break;
           case 10: {
             Name = input.ReadString();
+            break;
+          }
+          case 18: {
+            Family = input.ReadString();
             break;
           }
         }
@@ -250,7 +288,7 @@ namespace Sequowl.gRPC {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Sequowl.gRPC.GreetReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Sequowl.Host.GreetReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

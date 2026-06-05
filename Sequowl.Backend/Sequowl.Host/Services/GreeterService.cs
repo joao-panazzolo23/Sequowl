@@ -1,6 +1,6 @@
 using Grpc.Core;
 
-namespace Sequowl.gRPC.Services;
+namespace Sequowl.Host.Services;
 
 public class GreeterService(ILogger<GreeterService> logger) : Greeter.GreeterBase
 {
@@ -10,7 +10,7 @@ public class GreeterService(ILogger<GreeterService> logger) : Greeter.GreeterBas
 
         return Task.FromResult(new HelloReply
         {
-            Message = "Hello " + request.Name
+            Message = "Hello " + request.Name + request.Family
         });
     }
 }
