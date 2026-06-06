@@ -12,9 +12,6 @@ public class PostgreSqlConnection(
     ILogger<PostgreSqlConnection> logger
 ) : IDatabaseConnection
 {
-    private static readonly string[] WriteCommands =
-        ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "GRANT", "REVOKE"];
-
     public async Task<IReadOnlyList<DatabaseInfo>> GetDatabases(CancellationToken cancellationToken)
     {
         var sql = "";
@@ -66,11 +63,15 @@ public class PostgreSqlConnection(
                   FROM pg_class c
                   JOIN pg_namespace n ON n.oid = c.relnamespace
                   WHERE c.relkind IN ('r','v','m','f','p','S')
+                  AND c.relname = @Database
                   ORDER BY n.nspname, c.relname;
 
                   """;
 
-        await using var command = builder.Build(sql);
+        await using var command = builder.Build(
+            sql,
+            param => param.AddWithValue("Database", databaseName)
+        );
 
         var result = new List<TableInfo>();
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
@@ -82,7 +83,6 @@ public class PostgreSqlConnection(
                 schema: reader.GetString(1),
                 kind: reader.GetString(2)
             );
-
             result.Add(model);
         }
 
@@ -125,38 +125,66 @@ public class PostgreSqlConnection(
         return result.AsReadOnly();
     }
 
+
+    private static readonly string[] WriteCommands =
+    [
+        "INSERT",
+        "UPDATE",
+        "DELETE",
+        "DROP",
+        "ALTER",
+        "CREATE",
+        "TRUNCATE",
+        "GRANT",
+        "REVOKE"
+    ];
+
     private static bool IsReadOnly(string sql)
     {
         var trimmed = sql.TrimStart().ToUpperInvariant();
         return !WriteCommands.Any(cmd => trimmed.StartsWith(cmd));
     }
 
+    /// <summary>
+    /// Very ugly method. I would like to refactor this later.
+    /// </summary>
+    /// <param name="sqlCommand"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<SqlQueryResult> ExecuteQuery(string sqlCommand, CancellationToken cancellationToken)
     {
-        var sw = Stopwatch.StartNew();
         await using var command = builder.Build(sqlCommand);
 
-        var isReadOnly = IsReadOnly(sqlCommand);
-        if (!isReadOnly)
+        var sw = Stopwatch.StartNew();
+
+        try
         {
-            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+            if (!IsReadOnly(sqlCommand))
+            {
+                var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+                sw.Stop();
+                return SqlQueryResult.Altered(affected, sw.ElapsedMilliseconds);
+            }
+
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+            var result = new List<dynamic>();
+
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                IDictionary<string, object?> row = new ExpandoObject();
+
+                for (var i = 0; i < reader.FieldCount; i++)
+                    row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+
+                result.Add(row);
+            }
+
+            return SqlQueryResult.Query(data: result.AsReadOnly(), timeElapsed: sw.ElapsedMilliseconds);
+        }
+        catch (Exception e)
+        {
             sw.Stop();
-            return SqlQueryResult.Altered(affected, sw.ElapsedMilliseconds);
+            return SqlQueryResult.Failure(error: e.Message, sw.ElapsedMilliseconds);
         }
-
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-        var result = new List<dynamic>();
-
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            var row = new ExpandoObject() as IDictionary<string, object?>;
-
-            for (int i = 0; i < reader.FieldCount; i++)
-                row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
-
-            result.Add((ExpandoObject)row);
-        }
-
-        return SqlQueryResult.Query(data: result.AsReadOnly(), timeElapsed: sw.ElapsedMilliseconds);
     }
 }

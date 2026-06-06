@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sequowl.gRPC.Contracts\Sequowl.gRPC.Contracts.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Protobuf Include="Protos\greet.proto">
         <Generator>MSBuild:Compile</Generator>
       </Protobuf>
