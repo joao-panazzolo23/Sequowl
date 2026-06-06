@@ -2,7 +2,7 @@ syntax = "proto3";
 
 //Specific code for c# code gen.
 //If this code is not provided, source gen will use Proto's namespace instead.
-option csharp_namespace = "Sequowl.Host";
+option csharp_namespace = "Sequowl.Contracts";
 
 //THIS IS PROTO's NAMESPACE
 package greet;

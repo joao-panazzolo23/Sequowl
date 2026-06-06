@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Sequowl.Contracts;
 
 namespace Sequowl.Host.Services;
 

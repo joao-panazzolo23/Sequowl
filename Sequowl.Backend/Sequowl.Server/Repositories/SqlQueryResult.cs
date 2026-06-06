@@ -4,9 +4,9 @@ public record SqlQueryResult
 {
     public static SqlQueryResult Query(IReadOnlyList<dynamic> data, double timeElapsed)
     {
-        return new SqlQueryResult()
+        return new SqlQueryResult
         {
-            Data = new Optional<IReadOnlyList<dynamic>>(data),
+            Data = Optional<IReadOnlyList<dynamic>?>.For(data),
             TimeElapsed = timeElapsed,
             IsSuccess = true,
         };
@@ -18,7 +18,7 @@ public record SqlQueryResult
         {
             TimeElapsed = timeElapsed,
             IsSuccess = true,
-            RowsAffected = Optional<string>.For($"{rowsAffected} have been affected.")
+            RowsAffected = Optional<string?>.For($"{rowsAffected} have been affected.")
         };
     }
 
@@ -26,16 +26,16 @@ public record SqlQueryResult
     {
         return new SqlQueryResult
         {
-            Error = Optional<string>.For(error),
+            Error = Optional<string?>.For(error),
             TimeElapsed = timeElapsed,
             IsSuccess = false
         };
     }
 
 
-    public Optional<IReadOnlyList<dynamic>> Data { get; private set; } = new(null);
-    public Optional<string> Error { get; private set; } = new(null);
-    public Optional<string> RowsAffected { get; private set; } = new(null);
+    public Optional<IReadOnlyList<dynamic>?> Data { get; private set; } = new(null);
+    public Optional<string?> Error { get; private set; } = new(null);
+    public Optional<string?> RowsAffected { get; private set; } = new(null);
     public double TimeElapsed { get; private set; }
     public bool IsSuccess { get; private set; }
 }

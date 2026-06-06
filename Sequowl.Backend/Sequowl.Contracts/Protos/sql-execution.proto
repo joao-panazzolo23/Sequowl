@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-option csharp_namespace = "Sequowl.Host";
+option csharp_namespace = "Sequowl.Contracts";
 
 //THIS IS PROTO's NAMESPACE
 package sql_execution;
@@ -13,7 +13,7 @@ message SqlExecutionRequest{
 message SqlExecutionResponse{
   double UpdatedLines = 1;
   repeated google.protobuf.Any Data = 2; //equivalent to dynamic
-  double TimeElapsed = 3; //equivalent to dynamic
+  double TimeElapsed = 3;
   //that's the code usage
   //  Data = Any.Pack(new User
   //  {

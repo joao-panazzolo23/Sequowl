@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "Google.Protobuf/3.31.1": {
+      "Google.Protobuf/3.35.0": {
         "type": "package",
         "compile": {
           "lib/net5.0/Google.Protobuf.dll": {
@@ -13,6 +13,15 @@
           "lib/net5.0/Google.Protobuf.dll": {
             "related": ".pdb;.xml"
           }
+        }
+      },
+      "Google.Protobuf.Tools/3.35.0": {
+        "type": "package",
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildCrossTargeting/_._": {}
         }
       },
       "Grpc.AspNetCore/2.64.0": {
@@ -102,18 +111,18 @@
           }
         }
       },
-      "Grpc.Net.Client/2.64.0": {
+      "Grpc.Net.Client/2.80.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.Net.Common": "2.64.0"
+          "Grpc.Net.Common": "2.80.0"
         },
         "compile": {
-          "lib/net8.0/Grpc.Net.Client.dll": {
+          "lib/net10.0/Grpc.Net.Client.dll": {
             "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/net8.0/Grpc.Net.Client.dll": {
+          "lib/net10.0/Grpc.Net.Client.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -173,18 +182,33 @@
           "build/Grpc.Tools.props": {},
           "build/Grpc.Tools.targets": {}
         }
+      },
+      "Sequowl.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Google.Protobuf": "3.35.0",
+          "Google.Protobuf.Tools": "3.35.0",
+          "Grpc.Net.Client": "2.80.0"
+        },
+        "compile": {
+          "bin/placeholder/Sequowl.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Sequowl.Contracts.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "Google.Protobuf/3.31.1": {
-      "sha512": "gSnJbUmGiOTdWddPhqzrEscHq9Ls6sqRDPB9WptckyjTUyx70JOOAaDLkFff8gManZNN3hllQ4aQInnQyq/Z/A==",
+    "Google.Protobuf/3.35.0": {
+      "sha512": "OrUZCUzBXqdSmsQSWp/EPeINjOBcMU+PrZEJegw0aLgOGFHZ9ZI37X/SFrIxo8C9ghKynaKpPr3BVPc4EujWYg==",
       "type": "package",
-      "path": "google.protobuf/3.31.1",
+      "path": "google.protobuf/3.35.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "google.protobuf.3.31.1.nupkg.sha512",
+        "google.protobuf.3.35.0.nupkg.sha512",
         "google.protobuf.nuspec",
         "lib/net45/Google.Protobuf.dll",
         "lib/net45/Google.Protobuf.pdb",
@@ -198,6 +222,48 @@
         "lib/netstandard2.0/Google.Protobuf.dll",
         "lib/netstandard2.0/Google.Protobuf.pdb",
         "lib/netstandard2.0/Google.Protobuf.xml"
+      ]
+    },
+    "Google.Protobuf.Tools/3.35.0": {
+      "sha512": "W1pG23GZsTt6YrInU5EllMSxu1kmhBhCS/z0LN5jLueLQD2ai60qRwCqnxdZ4UTqbz3LeOxdWUsTdGYe8vj7fQ==",
+      "type": "package",
+      "path": "google.protobuf.tools/3.35.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Google.Protobuf.Tools.targets",
+        "buildCrossTargeting/Google.Protobuf.Tools.targets",
+        "google.protobuf.tools.3.35.0.nupkg.sha512",
+        "google.protobuf.tools.nuspec",
+        "tools/google/protobuf/any.proto",
+        "tools/google/protobuf/api.proto",
+        "tools/google/protobuf/descriptor.proto",
+        "tools/google/protobuf/duration.proto",
+        "tools/google/protobuf/empty.proto",
+        "tools/google/protobuf/field_mask.proto",
+        "tools/google/protobuf/source_context.proto",
+        "tools/google/protobuf/struct.proto",
+        "tools/google/protobuf/timestamp.proto",
+        "tools/google/protobuf/type.proto",
+        "tools/google/protobuf/wrappers.proto",
+        "tools/include/google/protobuf/any.proto",
+        "tools/include/google/protobuf/api.proto",
+        "tools/include/google/protobuf/descriptor.proto",
+        "tools/include/google/protobuf/duration.proto",
+        "tools/include/google/protobuf/empty.proto",
+        "tools/include/google/protobuf/field_mask.proto",
+        "tools/include/google/protobuf/source_context.proto",
+        "tools/include/google/protobuf/struct.proto",
+        "tools/include/google/protobuf/timestamp.proto",
+        "tools/include/google/protobuf/type.proto",
+        "tools/include/google/protobuf/wrappers.proto",
+        "tools/linux_aarch64/protoc",
+        "tools/linux_x64/protoc",
+        "tools/linux_x86/protoc",
+        "tools/macosx_x64/protoc",
+        "tools/windows_x64/protoc.exe",
+        "tools/windows_x86/protoc.exe"
       ]
     },
     "Grpc.AspNetCore/2.64.0": {
@@ -306,28 +372,28 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Net.Client/2.64.0": {
-      "sha512": "48sLEzEyAi3sIxunCPlz6st3WDUtD3fwya4lv9eeNrkLqs/qo4AosImYsMleS638ShQ9DD4s9DAfyQW3k4LgZQ==",
+    "Grpc.Net.Client/2.80.0": {
+      "sha512": "I1Aa24nTRMHqx0pmQfvthFsOpejquDjiJV6092KBqjw6EEr3wA9CMXlrdkoEgHartOiJrpKyZiQRl7n0NVlfBg==",
       "type": "package",
-      "path": "grpc.net.client/2.64.0",
+      "path": "grpc.net.client/2.80.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.net.client.2.64.0.nupkg.sha512",
+        "grpc.net.client.2.80.0.nupkg.sha512",
         "grpc.net.client.nuspec",
+        "lib/net10.0/Grpc.Net.Client.dll",
+        "lib/net10.0/Grpc.Net.Client.pdb",
+        "lib/net10.0/Grpc.Net.Client.xml",
         "lib/net462/Grpc.Net.Client.dll",
         "lib/net462/Grpc.Net.Client.pdb",
         "lib/net462/Grpc.Net.Client.xml",
-        "lib/net6.0/Grpc.Net.Client.dll",
-        "lib/net6.0/Grpc.Net.Client.pdb",
-        "lib/net6.0/Grpc.Net.Client.xml",
-        "lib/net7.0/Grpc.Net.Client.dll",
-        "lib/net7.0/Grpc.Net.Client.pdb",
-        "lib/net7.0/Grpc.Net.Client.xml",
         "lib/net8.0/Grpc.Net.Client.dll",
         "lib/net8.0/Grpc.Net.Client.pdb",
         "lib/net8.0/Grpc.Net.Client.xml",
+        "lib/net9.0/Grpc.Net.Client.dll",
+        "lib/net9.0/Grpc.Net.Client.pdb",
+        "lib/net9.0/Grpc.Net.Client.xml",
         "lib/netstandard2.0/Grpc.Net.Client.dll",
         "lib/netstandard2.0/Grpc.Net.Client.pdb",
         "lib/netstandard2.0/Grpc.Net.Client.xml",
@@ -459,13 +525,19 @@
         "tools/windows_x86/grpc_csharp_plugin.exe",
         "tools/windows_x86/protoc.exe"
       ]
+    },
+    "Sequowl.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Sequowl.Contracts/Sequowl.Contracts.csproj",
+      "msbuildProject": "../Sequowl.Contracts/Sequowl.Contracts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Grpc.AspNetCore >= 2.64.0",
       "Grpc.AspNetCore.Server.Reflection >= 2.80.0",
-      "Grpc.Reflection >= 2.80.0"
+      "Grpc.Reflection >= 2.80.0",
+      "Sequowl.Contracts >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -493,7 +565,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Contracts/Sequowl.Contracts.csproj": {
+              "projectPath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Contracts/Sequowl.Contracts.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

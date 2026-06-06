@@ -21,15 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="Protos\greet.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
-      <Protobuf Include="Protos\query-result.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
-      <Protobuf Include="Protos\sql-execution.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
+      <ProjectReference Include="..\Sequowl.Contracts\Sequowl.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

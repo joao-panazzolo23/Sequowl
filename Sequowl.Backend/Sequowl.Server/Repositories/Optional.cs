@@ -1,6 +1,6 @@
 namespace Sequowl.Host.Repositories;
 
-public record Optional<T> where T : class
+public record Optional<T> where T : class?
 {
     private readonly T? _value;
     public bool IsPresent => _value != null;

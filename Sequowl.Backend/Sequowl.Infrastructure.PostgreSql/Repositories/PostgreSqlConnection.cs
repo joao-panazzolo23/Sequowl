@@ -7,6 +7,12 @@ using Sequowl.Infrastructure.PostgreSql.Helpers;
 
 namespace Sequowl.Infrastructure.PostgreSql.Repositories;
 
+/// <summary>
+/// Todo: maybe would be nice to return query errors even outside query.
+/// I could show a snackbar to tell the user is something wrong with the connection string.
+/// </summary>
+/// <param name="builder"></param>
+/// <param name="logger"></param>
 public class PostgreSqlConnection(
     CommandBuilder builder,
     ILogger<PostgreSqlConnection> logger
@@ -14,7 +20,13 @@ public class PostgreSqlConnection(
 {
     public async Task<IReadOnlyList<DatabaseInfo>> GetDatabases(CancellationToken cancellationToken)
     {
-        var sql = "";
+        var sql = @" SELECT d.datname AS name,
+                            pg_get_userbyid(d.datdba) AS owner,
+                            pg_encoding_to_char(d.encoding) AS encoding,
+                            pg_database_size(d.datname) AS size_bytes
+                   FROM pg_database d
+                   ORDER BY d.datname;
+                ";
 
         await using var command = builder.Build(sql);
 
@@ -142,7 +154,7 @@ public class PostgreSqlConnection(
     private static bool IsReadOnly(string sql)
     {
         var trimmed = sql.TrimStart().ToUpperInvariant();
-        return !WriteCommands.Any(cmd => trimmed.StartsWith(cmd));
+        return !WriteCommands.Any(trimmed.StartsWith);
     }
 
     /// <summary>
