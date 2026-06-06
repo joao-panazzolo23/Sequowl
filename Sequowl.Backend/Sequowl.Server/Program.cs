@@ -6,7 +6,14 @@ builder.Services.AddGrpc(o =>
     o.IgnoreUnknownServices = true;
 });
 
+builder.Services.AddGrpcReflection();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapGrpcReflectionService();
+}
 
 app.Run();
 

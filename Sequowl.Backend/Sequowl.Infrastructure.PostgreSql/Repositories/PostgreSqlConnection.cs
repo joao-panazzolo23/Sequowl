@@ -1,0 +1,162 @@
+using System.Diagnostics;
+using System.Dynamic;
+using Microsoft.Extensions.Logging;
+using Sequowl.Host.Models;
+using Sequowl.Host.Repositories;
+using Sequowl.Infrastructure.PostgreSql.Helpers;
+
+namespace Sequowl.Infrastructure.PostgreSql.Repositories;
+
+public class PostgreSqlConnection(
+    CommandBuilder builder,
+    ILogger<PostgreSqlConnection> logger
+) : IDatabaseConnection
+{
+    private static readonly string[] WriteCommands =
+        ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "GRANT", "REVOKE"];
+
+    public async Task<IReadOnlyList<DatabaseInfo>> GetDatabases(CancellationToken cancellationToken)
+    {
+        var sql = "";
+
+        await using var command = builder.Build(sql);
+
+        var result = new List<DatabaseInfo>();
+
+        try
+        {
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+            while (await reader.ReadAsync())
+            {
+                result.Add(new DatabaseInfo
+                {
+                    Name = reader.GetString(0),
+                    Owner = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    Encoding = reader.IsDBNull(2) ? null : reader.GetString(2),
+                    SizeBytes = reader.IsDBNull(3) ? null : reader.GetInt64(3),
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e.Message);
+            throw;
+        }
+
+        return result.AsReadOnly();
+    }
+
+    public async Task<IReadOnlyList<TableInfo>> GetObjects(
+        string databaseName,
+        CancellationToken cancellationToken
+    )
+    {
+        var sql = """
+                  SELECT
+                      n.nspname AS schema_name,
+                      c.relname AS object_name,
+                      CASE c.relkind
+                          WHEN 'r' THEN 'TABLE'
+                          WHEN 'v' THEN 'VIEW'
+                          WHEN 'm' THEN 'MATERIALIZED_VIEW'
+                          WHEN 'f' THEN 'FOREIGN_TABLE'
+                          WHEN 'p' THEN 'PARTITIONED_TABLE'
+                          WHEN 'S' THEN 'SEQUENCE'
+                      END AS kind
+                  FROM pg_class c
+                  JOIN pg_namespace n ON n.oid = c.relnamespace
+                  WHERE c.relkind IN ('r','v','m','f','p','S')
+                  ORDER BY n.nspname, c.relname;
+
+                  """;
+
+        await using var command = builder.Build(sql);
+
+        var result = new List<TableInfo>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            var model = new TableInfo(
+                name: reader.GetString(0),
+                schema: reader.GetString(1),
+                kind: reader.GetString(2)
+            );
+
+            result.Add(model);
+        }
+
+        return result.AsReadOnly();
+    }
+
+    public async Task<IReadOnlyList<ColumnInfo>> GetColumns(string databaseName, string tableName,
+        CancellationToken cancellationToken)
+    {
+        var sql = @"
+            SELECT
+                column_name,
+                data_type,
+                udt_name,
+                character_maximum_length,
+                is_nullable,
+                column_default,
+                ordinal_position
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = 'vehicles'
+            ORDER BY ordinal_position;
+            ";
+
+        await using var command = builder.Build(sql);
+        var result = new List<ColumnInfo>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            var model = new ColumnInfo(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetBoolean(1),
+                reader.GetString(0),
+                reader.GetInt32(0)
+            );
+            result.Add(model);
+        }
+
+        return result.AsReadOnly();
+    }
+
+    private static bool IsReadOnly(string sql)
+    {
+        var trimmed = sql.TrimStart().ToUpperInvariant();
+        return !WriteCommands.Any(cmd => trimmed.StartsWith(cmd));
+    }
+
+    public async Task<SqlQueryResult> ExecuteQuery(string sqlCommand, CancellationToken cancellationToken)
+    {
+        var sw = Stopwatch.StartNew();
+        await using var command = builder.Build(sqlCommand);
+
+        var isReadOnly = IsReadOnly(sqlCommand);
+        if (!isReadOnly)
+        {
+            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+            sw.Stop();
+            return SqlQueryResult.Altered(affected, sw.ElapsedMilliseconds);
+        }
+
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var result = new List<dynamic>();
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            var row = new ExpandoObject() as IDictionary<string, object?>;
+
+            for (int i = 0; i < reader.FieldCount; i++)
+                row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+
+            result.Add((ExpandoObject)row);
+        }
+
+        return SqlQueryResult.Query(data: result.AsReadOnly(), timeElapsed: sw.ElapsedMilliseconds);
+    }
+}

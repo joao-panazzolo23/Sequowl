@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sequowl.SDK", "Sequowl.SDK\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sequowl.gRPC.Contracts", "Sequowl.gRPC.Contracts\Sequowl.gRPC.Contracts.csproj", "{A19C94B2-31FD-491B-87F8-9FDE6AD9AFEB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sequowl.Infraestructure", "Sequowl.Infraestructure", "{845738AF-142A-4320-8D34-74999D6334B0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sequowl.Infrastructure", "Sequowl.Infrastructure", "{845738AF-142A-4320-8D34-74999D6334B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sequowl.Infrastructure.PostgreSql", "Sequowl.Infrastructure.PostgreSql\Sequowl.Infrastructure.PostgreSql.csproj", "{3E933B32-3F74-49A7-B8D5-C11D69EA45DB}"
 EndProject
