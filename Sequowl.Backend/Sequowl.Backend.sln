@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FA6D5374-30CF-48F6-B424-4223B8B83DC8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sequowl.gRPC", "Sequowl.gRPC", "{644DB2CD-72EC-4ECB-AD1F-9BFC3C9C5DC5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sequowl.Presentation", "Sequowl.Presentation", "{644DB2CD-72EC-4ECB-AD1F-9BFC3C9C5DC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C021C797-027E-4E2A-ACEA-4785CC3DF4F8}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seqowl.Infrastructure.MySql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sequowl.Contracts", "Sequowl.Contracts\Sequowl.Contracts.csproj", "{CC396ABC-123D-4376-94CF-520056451527}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sequowl.Application", "Sequowl.Application", "{15762E8C-B139-4570-B610-C420EDB7A31A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sequowl.Application", "Sequowl.Application\Sequowl.Application.csproj", "{04603B42-2648-452D-BA4E-1500E2411E53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,8 @@ Global
 		{3E933B32-3F74-49A7-B8D5-C11D69EA45DB} = {845738AF-142A-4320-8D34-74999D6334B0}
 		{E1A2049A-F372-4010-82DD-FF22CD28AFB7} = {845738AF-142A-4320-8D34-74999D6334B0}
 		{CC396ABC-123D-4376-94CF-520056451527} = {644DB2CD-72EC-4ECB-AD1F-9BFC3C9C5DC5}
+		{15762E8C-B139-4570-B610-C420EDB7A31A} = {FA6D5374-30CF-48F6-B424-4223B8B83DC8}
+		{04603B42-2648-452D-BA4E-1500E2411E53} = {15762E8C-B139-4570-B610-C420EDB7A31A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7C508080-60C8-4961-A96F-580F9F46E6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -49,5 +55,9 @@ Global
 		{CC396ABC-123D-4376-94CF-520056451527}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC396ABC-123D-4376-94CF-520056451527}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC396ABC-123D-4376-94CF-520056451527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04603B42-2648-452D-BA4E-1500E2411E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04603B42-2648-452D-BA4E-1500E2411E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04603B42-2648-452D-BA4E-1500E2411E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04603B42-2648-452D-BA4E-1500E2411E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
