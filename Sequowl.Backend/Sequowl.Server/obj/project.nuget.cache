@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "azFlSV0ShHQ=",
+  "dgSpecHash": "mor0lgeZOtk=",
   "success": true,
   "projectFilePath": "/home/john/RiderProjects/Sequowl/Sequowl.Backend/Sequowl.Server/Sequowl.Server.csproj",
   "expectedPackageFiles": [
@@ -15,7 +15,9 @@
     "/home/john/.nuget/packages/grpc.net.clientfactory/2.64.0/grpc.net.clientfactory.2.64.0.nupkg.sha512",
     "/home/john/.nuget/packages/grpc.net.common/2.80.0/grpc.net.common.2.80.0.nupkg.sha512",
     "/home/john/.nuget/packages/grpc.reflection/2.80.0/grpc.reflection.2.80.0.nupkg.sha512",
-    "/home/john/.nuget/packages/grpc.tools/2.64.0/grpc.tools.2.64.0.nupkg.sha512"
+    "/home/john/.nuget/packages/grpc.tools/2.64.0/grpc.tools.2.64.0.nupkg.sha512",
+    "/home/john/.nuget/packages/mediator.abstractions/3.1.0-rc.1/mediator.abstractions.3.1.0-rc.1.nupkg.sha512",
+    "/home/john/.nuget/packages/riok.mapperly/5.0.0-next.8/riok.mapperly.5.0.0-next.8.nupkg.sha512"
   ],
   "logs": []
 }

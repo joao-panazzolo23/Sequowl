@@ -183,13 +183,57 @@
           "build/Grpc.Tools.targets": {}
         }
       },
+      "Mediator.Abstractions/3.1.0-rc.1": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Mediator.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Mediator.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Riok.Mapperly/5.0.0-next.8": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Riok.Mapperly.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Riok.Mapperly.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/_._": {}
+        }
+      },
+      "Sequowl.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Mediator.Abstractions": "3.1.0-rc.1",
+          "Riok.Mapperly": "5.0.0-next.8"
+        },
+        "compile": {
+          "bin/placeholder/Sequowl.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Sequowl.Application.dll": {}
+        }
+      },
       "Sequowl.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "Google.Protobuf": "3.35.0",
           "Google.Protobuf.Tools": "3.35.0",
-          "Grpc.Net.Client": "2.80.0"
+          "Grpc.Net.Client": "2.80.0",
+          "Sequowl.Application": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Sequowl.Contracts.dll": {}
@@ -526,6 +570,56 @@
         "tools/windows_x86/protoc.exe"
       ]
     },
+    "Mediator.Abstractions/3.1.0-rc.1": {
+      "sha512": "iIjr4GZ3HuRfUqwsCHKxXJxP5gVQ3g/xeExH3i73081gpBm/40yz3BoOyAVoLrqneh2TCftQhAzaaZwBukvJXQ==",
+      "type": "package",
+      "path": "mediator.abstractions/3.1.0-rc.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "lib/net10.0/Mediator.dll",
+        "lib/net10.0/Mediator.xml",
+        "lib/net8.0/Mediator.dll",
+        "lib/net8.0/Mediator.xml",
+        "lib/net9.0/Mediator.dll",
+        "lib/net9.0/Mediator.xml",
+        "lib/netstandard2.0/Mediator.dll",
+        "lib/netstandard2.0/Mediator.xml",
+        "mediator.abstractions.3.1.0-rc.1.nupkg.sha512",
+        "mediator.abstractions.nuspec"
+      ]
+    },
+    "Riok.Mapperly/5.0.0-next.8": {
+      "sha512": "JB+yK0HqsadVWHV0wFN1YXG92heWtkiVQ1jfNpO8reAGQRrwuqXg1FX2EBoR5YGwaFC92tqLIHFYM+uHXK1oNA==",
+      "type": "package",
+      "path": "riok.mapperly/5.0.0-next.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "analyzers/roslyn4.11/dotnet/cs/Riok.Mapperly.Abstractions.dll",
+        "analyzers/roslyn4.11/dotnet/cs/Riok.Mapperly.dll",
+        "analyzers/roslyn4.14/dotnet/cs/Riok.Mapperly.Abstractions.dll",
+        "analyzers/roslyn4.14/dotnet/cs/Riok.Mapperly.dll",
+        "analyzers/roslyn4.8/dotnet/cs/Riok.Mapperly.Abstractions.dll",
+        "analyzers/roslyn4.8/dotnet/cs/Riok.Mapperly.dll",
+        "analyzers/roslyn5.0/dotnet/cs/Riok.Mapperly.Abstractions.dll",
+        "analyzers/roslyn5.0/dotnet/cs/Riok.Mapperly.dll",
+        "build/Riok.Mapperly.targets",
+        "lib/netstandard2.0/Riok.Mapperly.Abstractions.dll",
+        "lib/netstandard2.0/Riok.Mapperly.Abstractions.xml",
+        "logo.png",
+        "riok.mapperly.5.0.0-next.8.nupkg.sha512",
+        "riok.mapperly.nuspec"
+      ]
+    },
+    "Sequowl.Application/1.0.0": {
+      "type": "project",
+      "path": "../Sequowl.Application/Sequowl.Application.csproj",
+      "msbuildProject": "../Sequowl.Application/Sequowl.Application.csproj"
+    },
     "Sequowl.Contracts/1.0.0": {
       "type": "project",
       "path": "../Sequowl.Contracts/Sequowl.Contracts.csproj",
@@ -620,7 +714,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.108/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.109/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

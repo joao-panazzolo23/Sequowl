@@ -9,16 +9,22 @@ import "google/protobuf/timestamp.proto";
 package query_result;
 
 service ExecuteQuery{
-  rpc ExecuteQuery(QueryCommand) returns (QueryResult);
+  rpc ExecuteQuery(QueryRequest) returns (QueryResult);
 }
 
-message QueryCommand{
+message QueryRequest{
   string Sql = 1;
+  string Host = 2;
+  string Database = 3;
+  string Password = 4;
+  string Provider = 5;
+  string Username = 6;
+  string Schema = 7;
+  string ConnectionString = 8;
 }
 
 message QueryResult {
   repeated Column columns = 1;
-  repeated Row rows = 2;
 }
 
 message Column {

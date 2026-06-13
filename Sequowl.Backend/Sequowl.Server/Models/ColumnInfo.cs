@@ -7,13 +7,16 @@ public sealed record ColumnInfo
         string dbTypeName,
         bool isNullable,
         string defaultValue,
-        int ordinalPosition)
+        int ordinalPosition,
+        bool isPrimaryKey
+    )
     {
         Name = name;
         DbTypeName = dbTypeName;
         IsNullable = isNullable;
         DefaultValue = defaultValue;
         OrdinalPosition = ordinalPosition;
+        IsPrimaryKey = isPrimaryKey;
     }
 
     public string Name { get; init; }

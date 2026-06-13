@@ -4,8 +4,8 @@ namespace Sequowl.Host.Providers;
 
 public interface IDatabaseProvider
 {
-    Task<IDatabaseProvider> CreateSessionAsync(
-        ConnectionDefinition definition,
-        CancellationToken ct
-    );
+    // Task<IDatabaseProvider> CreateSessionAsync(
+    //     ConnectionDefinition definition,
+    //     CancellationToken ct
+    // );
 }

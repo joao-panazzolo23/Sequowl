@@ -28,6 +28,7 @@ public class PostgreSqlConnection(
                    ORDER BY d.datname;
                 ";
 
+
         await using var command = builder.Build(sql);
 
         var result = new List<DatabaseInfo>();
@@ -37,13 +38,13 @@ public class PostgreSqlConnection(
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             while (await reader.ReadAsync())
             {
-                result.Add(new DatabaseInfo
-                {
-                    Name = reader.GetString(0),
-                    Owner = reader.IsDBNull(1) ? null : reader.GetString(1),
-                    Encoding = reader.IsDBNull(2) ? null : reader.GetString(2),
-                    SizeBytes = reader.IsDBNull(3) ? null : reader.GetInt64(3),
-                });
+                var database = new DatabaseInfo(name: reader.GetString(0),
+                    owner: reader.IsDBNull(1) ? null : reader.GetString(1),
+                    encoding: reader.IsDBNull(2) ? null : reader.GetString(2),
+                    sizeBytes: reader.IsDBNull(3) ? null : reader.GetInt64(3)
+                );
+
+                result.Add(database);
             }
         }
         catch (Exception e)
@@ -127,9 +128,10 @@ public class PostgreSqlConnection(
             var model = new ColumnInfo(
                 reader.GetString(0),
                 reader.GetString(1),
-                reader.GetBoolean(1),
-                reader.GetString(0),
-                reader.GetInt32(0)
+                reader.GetBoolean(2),
+                reader.GetString(3),
+                reader.GetInt32(4),
+                reader.GetBoolean(5)
             );
             result.Add(model);
         }
