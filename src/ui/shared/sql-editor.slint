@@ -1,0 +1,11 @@
+import { AboutSlint, VerticalBox, ScrollView } from "std-widgets.slint";
+import { RadiusTokens } from "../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../tokens/colors-tokens.slint";
+
+export component SqlEditor inherits ScrollView {
+    Rectangle {
+        border-radius: RadiusTokens.large;
+        background: ColorTokens.background;
+        vertical-stretch: 3;
+    }
+}

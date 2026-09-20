@@ -1,0 +1,44 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { SpacingTokens } from "../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../tokens/colors-tokens.slint";
+
+export component SidebarItem inherits Rectangle {
+    in property <string> text;
+    in property <image> buttonIcon;
+    in property <bool> selected:false;
+
+    callback clicked();
+
+    height: 36px;
+    background: selected
+        ? ColorTokens.surface-selected
+        : transparent;
+
+    TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+
+    HorizontalLayout {
+        padding-left: SpacingTokens.small;
+        padding-right: SpacingTokens.small;
+        padding-top: SpacingTokens.small;
+        spacing: SpacingTokens.small;
+        alignment: center;
+
+        Image {
+            source: root.buttonIcon;
+            width: 18px;
+            height: 18px;
+            colorize: ColorTokens.icons;
+        }
+
+        // Text {
+        //     text: root.text;
+        //     color: #e4e4e7;
+        //     vertical-alignment: center;
+        //     horizontal-stretch: 1;
+        // }
+    }
+}

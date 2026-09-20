@@ -1,0 +1,36 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { SidebarItem } from "sidebar-item.slint";
+import { SpacingTokens, RadiusTokens } from "../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../tokens/colors-tokens.slint";
+
+export component Sidebar inherits Rectangle {
+    width: 30px;
+    background: transparent;
+    VerticalLayout {
+        padding-top: SpacingTokens.large;
+        padding-bottom: SpacingTokens.large;
+        spacing: SpacingTokens.small;
+
+        SidebarItem {
+            text: "Connections";
+            buttonIcon: @image-url("../assets/icons/database.svg");
+            clicked => {}
+        }
+
+        SidebarItem {
+            text: "Query History";
+            buttonIcon: @image-url("../assets/icons/history.svg");
+            clicked => {}
+        }
+
+        Rectangle {
+            vertical-stretch: 1;
+        }
+
+        SidebarItem {
+            text: "Settings";
+            buttonIcon: @image-url("../assets/icons/settings.svg");
+            clicked => {}
+        }
+    }
+}

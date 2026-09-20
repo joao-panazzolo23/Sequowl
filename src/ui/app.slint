@@ -1,0 +1,27 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { VerticalBox, Button, HorizontalBox } from "std-widgets.slint";
+import { Sidebar } from "shared/sidebar.slint";
+import { ColorTokens } from "tokens/colors-tokens.slint";
+import { MainArea } from "shared/main-area.slint";
+import { SpacingTokens, RadiusTokens } from "tokens/spacing-tokens.slint";
+import { AppFrame } from "shared/app-frame.slint";
+
+export component App inherits Window {
+    no-frame: false;
+    title: "Sequowl";
+    preferred-width: 1260px;
+    preferred-height: 800px;
+
+    min-width: 900px;
+    min-height: 600px;
+
+    HorizontalLayout {
+        Sidebar {
+            width: 48px;
+        }
+
+        AppFrame {
+            horizontal-stretch: 1;
+        }
+    }
+}
