@@ -1,27 +1,35 @@
 import { AboutSlint, VerticalBox } from "std-widgets.slint";
 import { VerticalBox, Button, HorizontalBox } from "std-widgets.slint";
-import { Sidebar } from "shared/sidebar.slint";
 import { ColorTokens } from "tokens/colors-tokens.slint";
-import { MainArea } from "shared/main-area.slint";
 import { SpacingTokens, RadiusTokens } from "tokens/spacing-tokens.slint";
-import { AppFrame } from "shared/app-frame.slint";
+import { AppFrame } from "features/default-page/pages/app-frame.slint";
+import { Sidebar } from "features/default-page/components/sidebar.slint";
+import { PanelPage } from "features/default-page/enums/panel-page.slint";
 
 export component App inherits Window {
+    //minha ideia eh fazer no frame e colocar os botoes de fechar e minimizar na UI
     no-frame: false;
     title: "Sequowl";
     preferred-width: 1260px;
     preferred-height: 800px;
-
     min-width: 900px;
     min-height: 600px;
+    in-out property <PanelPage> page;
 
     HorizontalLayout {
+        padding-top: SpacingTokens.large;
+        padding-bottom: SpacingTokens.large;
         Sidebar {
-            width: 48px;
+            current-page: page;
+            page-changed(page) => {
+                root.page = page;
+            }
         }
 
         AppFrame {
+            page: page;
             horizontal-stretch: 1;
+            vertical-stretch: 1;
         }
     }
 }

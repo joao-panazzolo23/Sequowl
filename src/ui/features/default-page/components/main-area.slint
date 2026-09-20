@@ -1,0 +1,76 @@
+import { AboutSlint, VerticalBox, HorizontalBox } from "std-widgets.slint";
+import { HorizontalSplitter } from "../../../shared/horizontal-splitter.slint";
+import { VerticalSplitter } from "../../../shared/vertical-splitter.slint";
+import { SqlEditor } from "../../sql-editor/components/sql-editor.slint";
+import {
+    RadiusTokens,
+    SpacingTokens,
+} from "../../../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../../../tokens/colors-tokens.slint";
+import { Terminal } from "../../terminal/components/terminal.slint";
+import { SidebarPanel } from "sidebar-panel.slint";
+import { PanelPage } from "../enums/panel-page.slint";
+export component MainArea inherits Rectangle {
+    in-out property <length> panel-width: 240px;
+    in-out property <length> editor-height: 400px;
+    in-out property <PanelPage> selected-page: PanelPage.Databases;
+
+    HorizontalLayout {
+        padding-top: SpacingTokens.large;
+        spacing: 0;
+
+        SidebarPanel {
+            component-width: root.panel-width;
+
+            if root.selected-page == PanelPage.Databases: Rectangle {
+                width: parent.width;
+                height: parent.height;
+                background: Colors.red;
+            }
+
+            if root.selected-page == PanelPage.QueryHistory: Rectangle {
+                width: parent.width;
+                height: parent.height;
+                background: Colors.blue;
+            }
+
+            // if root.selected-page == PanelPage.QueryHistory: Rectangle {
+            //     width: parent.width;
+            //     height: parent.height;
+            //     background: Colors.red;
+            // }
+        }
+
+        //tem uns bugzinhos visuais nessa tela, provavelmente pq aq o max eh um valor disparelho em relacao ao
+        // max de baixo, verificar dps
+        HorizontalSplitter {
+            moved-by(delta) => {
+                root.panel-width = max(
+                    180px,
+                    min(
+                        500px,
+                        root.panel-width + delta));
+            }
+        }
+
+        // Workspace
+        VerticalLayout {
+            horizontal-stretch: 1;
+
+            SqlEditor {
+                editor-height: editor-height;
+            }
+
+            // Splitter
+            VerticalSplitter {
+                moved-by(delta) => {
+                    root.editor-height = max(
+                        150px,
+                        root.editor-height + delta);
+                }
+            }
+
+            Terminal { }
+        }
+    }
+}

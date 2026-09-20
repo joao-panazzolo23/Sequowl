@@ -1,0 +1,10 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { RadiusTokens } from "../../../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../../../tokens/colors-tokens.slint";
+
+export component Terminal inherits Rectangle {
+    vertical-stretch: 1;
+    min-height: 120px;
+    border-radius: RadiusTokens.large;
+    background: ColorTokens.surface;
+}

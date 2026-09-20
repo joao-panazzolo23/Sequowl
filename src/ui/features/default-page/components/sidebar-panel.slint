@@ -1,0 +1,13 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { RadiusTokens } from "../../../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../../../tokens/colors-tokens.slint";
+
+export component SidebarPanel inherits Rectangle {
+    in-out property <length> component-width: 240px;
+    width: root.component-width;
+    border-radius: RadiusTokens.large;
+    background: ColorTokens.surface;
+    clip: true;
+
+    @children
+}

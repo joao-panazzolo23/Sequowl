@@ -1,0 +1,47 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { SidebarItem } from "sidebar-item.slint";
+import { SpacingTokens } from "../../../tokens/spacing-tokens.slint";
+import { AppIcon } from "../../../shared/app-icon.slint";
+import { IconData } from "../../../shared/icon-data.slint";
+import { PanelPage } from "../../default-page/enums/panel-page.slint";
+
+export component Sidebar inherits Rectangle {
+    callback page-changed(PanelPage);
+    background: transparent;
+    in-out property <PanelPage> current-page;
+
+    VerticalLayout {
+        padding-top: 50px;
+        padding-bottom: SpacingTokens.large;
+        padding-left: SpacingTokens.medium;
+        padding-right: SpacingTokens.medium;
+        spacing: SpacingTokens.small;
+
+        ///esses itens tbm spa q eh mlr o pai absoluto gerenciar, fica ate mais legivel
+        SidebarItem {
+            text: "Connections";
+            buttonIcon: IconData.database;
+            selected: root.current-page == PanelPage.Databases;
+            clicked => { root.page-changed(PanelPage.Databases) };
+        }
+
+        SidebarItem {
+            text: "Query History";
+            buttonIcon: IconData.history;
+            selected: root.current-page == PanelPage.QueryHistory;
+            clicked => { root.page-changed(PanelPage.QueryHistory) };
+        }
+
+        Rectangle {
+            vertical-stretch: 1;
+        }
+
+        SidebarItem {
+            text: "Settings";
+            buttonIcon: IconData.settings;
+            clicked => {
+                //vai abrir outra window
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+
+///vai ser uma pagina a parte que vai abrir por cima da pagina principal
+// e vai ser uma listagem separada, q nem a do zed
+// qro q mude cores, letras, bindings
+export component Settings inherits Window {
+    VerticalBox {
+        Text {
+            text: "Hello World!";
+        }
+
+        AboutSlint {
+            preferred-height: 150px;
+        }
+    }
+}

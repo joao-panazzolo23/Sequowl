@@ -1,0 +1,16 @@
+import { AboutSlint, VerticalBox, ScrollView } from "std-widgets.slint";
+import { RadiusTokens } from "../../../tokens/spacing-tokens.slint";
+import { ColorTokens } from "../../../tokens/colors-tokens.slint";
+
+export component SqlEditor inherits Rectangle {
+    in-out property <length> editor-height: 400px;
+    Rectangle {
+        preferred-height: root.editor-height;
+        min-height: 150px;
+        border-radius: RadiusTokens.large;
+        background: ColorTokens.surface;
+        // border-radius: RadiusTokens.large;
+        // background: ColorTokens.background;
+        // vertical-stretch: 3;
+    }
+}
