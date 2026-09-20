@@ -1,0 +1,19 @@
+import { SpacingTokens } from "../../../tokens/spacing-tokens.slint";
+import { MainArea } from "../components/main-area.slint";
+import { PanelPage } from "../enums/panel-page.slint";
+export component AppFrame inherits Rectangle {
+    in-out property <PanelPage> page;
+    background: transparent;
+
+    HorizontalLayout {
+        padding-top: SpacingTokens.large;
+        padding-bottom: SpacingTokens.large;
+        padding-right: SpacingTokens.large;
+
+        MainArea {
+            selected-page: page;
+            horizontal-stretch: 1;
+            vertical-stretch: 1;
+        }
+    }
+}
