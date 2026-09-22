@@ -1,0 +1,7 @@
+import { DatabaseProvider } from "../enums/database-provider.slint";
+import { SchemaModel } from "schema-model.slint";
+
+export struct DatabaseModel {
+    name: string,
+    schemas: [SchemaModel],
+}

@@ -2,9 +2,12 @@ import { AboutSlint, VerticalBox } from "std-widgets.slint";
 import { VerticalBox, Button, HorizontalBox } from "std-widgets.slint";
 import { ColorTokens } from "tokens/colors-tokens.slint";
 import { SpacingTokens, RadiusTokens } from "tokens/spacing-tokens.slint";
-import { AppFrame } from "features/default-page/pages/app-frame.slint";
-import { Sidebar } from "features/default-page/components/sidebar.slint";
-import { PanelPage } from "features/default-page/enums/panel-page.slint";
+import { IconData } from "shared/icon-data.slint";
+import { Sidebar } from "features/sidebar/components/sidebar.slint";
+import { AppFrame } from "features/sidebar/pages/app-frame.slint";
+import { Sidebar } from "features/sidebar/components/sidebar.slint";
+import { PanelPage } from "features/sidebar/enums/panel-page.slint";
+
 
 export component App inherits Window {
     //minha ideia eh fazer no frame e colocar os botoes de fechar e minimizar na UI
@@ -19,11 +22,17 @@ export component App inherits Window {
     HorizontalLayout {
         padding-top: SpacingTokens.large;
         padding-bottom: SpacingTokens.large;
+
         Sidebar {
-            current-page: page;
+            current-page <=> root.page;
             page-changed(page) => {
                 root.page = page;
             }
+
+            items: [
+                { text: "Connections", button-icon: IconData.database, page: PanelPage.Databases },
+                { text: "Query History", button-icon: IconData.history, page: PanelPage.QueryHistory }
+            ];
         }
 
         AppFrame {
