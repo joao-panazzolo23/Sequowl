@@ -1,0 +1,33 @@
+import { VerticalBox, ListView } from "std-widgets.slint";
+import { DatabaseModel } from "../models/database-model.slint";
+import { DatabaseItem } from "database-item.slint";
+
+
+export component DatabaseExplorer inherits Rectangle {
+    in property <[DatabaseModel]> databases;
+
+    VerticalBox {
+        width: parent.width;
+        ListView {
+            for database in databases: DatabaseItem {
+                title: database.name;
+                level: 0;
+
+                for schema in database.schemas: DatabaseItem {
+                    title: schema.name;
+                    level: 1;
+
+                    for table in schema.tables: DatabaseItem {
+                        title: table.name;
+                        level: 2;
+
+                        for column in table.columns: DatabaseItem {
+                            title: column.name;
+                            level: 3;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

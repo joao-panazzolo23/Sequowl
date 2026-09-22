@@ -1,0 +1,51 @@
+import { HorizontalBox, VerticalBox } from "std-widgets.slint";
+import { IconData } from "../../../shared/icon-data.slint";
+
+export component DatabaseItem inherits VerticalBox {
+    in property <string> title;
+    in property <int> level: 0;
+    in-out property <bool> expanded: false;
+
+    spacing: 0px;
+
+    Rectangle {
+        height: 32px;
+        width: parent.width;
+
+        HorizontalBox {
+            x: level * 20px;
+            height: parent.height;
+
+            Image {
+                source: IconData.chevron;
+                width: 16px;
+                height: 16px;
+                vertical-alignment: center;
+                transform-rotation: root.expanded ? 270deg : 0deg;
+            }
+
+            Text {
+                text: root.title;
+                vertical-alignment: center;
+            }
+        }
+
+        TouchArea {
+            clicked => {
+                root.expanded = !root.expanded;
+            }
+        }
+    }
+
+    Rectangle {
+        width: parent.width;
+        height: root.expanded ? self.preferred-height : 0px;
+        clip: true;
+
+        VerticalBox {
+            // id: child;
+            width: parent.width;
+            @children
+        }
+    }
+}

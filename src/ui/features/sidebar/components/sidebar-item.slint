@@ -7,7 +7,7 @@ import {
 
 export component SidebarItem inherits Rectangle {
     in property <string> text;
-    in property <image> buttonIcon;
+    in property <image> button-icon;
     in-out property <bool> selected:false;
 
     callback clicked();
@@ -35,7 +35,7 @@ export component SidebarItem inherits Rectangle {
         Image {
             vertical-alignment: center;
             horizontal-alignment: center;
-            source: root.buttonIcon;
+            source: root.button-icon;
             width: 18px;
             height: 18px;
             colorize: ColorTokens.icons;
