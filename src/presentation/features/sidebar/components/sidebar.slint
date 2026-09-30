@@ -1,0 +1,46 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { SidebarItem } from "sidebar-item.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { AppIcon } from "../../../shared/app-icon.slint";
+import { IconData } from "../../../shared/icon-data.slint";
+import { PanelPage } from "../../sidebar/enums/panel-page.slint";
+import { SidebarItemData } from "../models/sidebar-item-data.slint";
+
+export component Sidebar inherits Rectangle {
+    callback page-changed(PanelPage);
+    background: transparent;
+    in-out property <[SidebarItemData]> items;
+    in-out property <PanelPage> current-page;
+
+    VerticalLayout {
+        padding-top: 50px;
+        padding-bottom: AppSpacings.large;
+        padding-left: AppSpacings.medium;
+        padding-right: AppSpacings.medium;
+        spacing: AppSpacings.small;
+
+        for item in root.items: SidebarItem {
+            text: item.text;
+            button-icon: item.button-icon;
+            selected: root.current-page == item.page;
+
+            clicked => {
+                root.current-page = item.page;
+                root.page-changed(item.page);
+            }
+        }
+
+        Rectangle {
+            vertical-stretch: 1;
+        }
+
+        //esse vai ser fixo msm q sfd
+        SidebarItem {
+            text: "Settings";
+            button-icon: IconData.settings;
+            clicked => {
+                //vai abrir outra window
+            }
+        }
+    }
+}

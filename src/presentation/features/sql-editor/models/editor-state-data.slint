@@ -1,0 +1,30 @@
+import { CompletionItemData } from "completion-item-data.slint";
+import { EditorDiagnosticData } from "editor-diagnostic-data.slint";
+import { EditorLineData } from "editor-line-data.slint";
+import { HighlightSpanData } from "highlight-span-data.slint";
+
+export struct EditorStateData {
+    lines: [EditorLineData],
+    spans: [HighlightSpanData],
+    diagnostics: [EditorDiagnosticData],
+    completions: [CompletionItemData],
+    completion-visible: bool,
+    completion-selected: int,
+    completion-prefix: string,
+    completion-anchor-row: int,
+    completion-anchor-column: int,
+    caret-row: int,
+    caret-column: int,
+    selection-start-row: int,
+    selection-start-column: int,
+    selection-end-row: int,
+    selection-end-column: int,
+    has-selection: bool,
+    scroll-row: int,
+    scroll-column: int,
+    can-undo: bool,
+    can-redo: bool,
+    error-count: int,
+    warning-count: int,
+    status-text: string,
+}

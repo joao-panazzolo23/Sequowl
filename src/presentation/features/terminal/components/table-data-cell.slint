@@ -1,0 +1,55 @@
+import { TableCellData } from "../models/table-cell-data.slint";
+import { AppBadge } from "../../../shared/app-badge.slint";
+import { TableStyle } from "../../../models/table-style.slint";
+export component TableDataCell inherits Rectangle {
+    in property <TableCellData> cell;
+    in property <length> cell-width;
+    in property <TableStyle> style;
+    in property <bool> is-selected;
+
+    width: root.cell-width;
+    height: root.style.row-height;
+    clip: true;
+
+    HorizontalLayout {
+        padding-left: root.style.cell-padding-horizontal;
+        padding-right: root.style.cell-padding-horizontal;
+        alignment: start;
+
+        if root.cell.is-null: Text {
+            text: "NULL";
+            color: root.style.null-color;
+            font-family: root.style.font-family;
+            font-size: root.style.font-size - 1px;
+            font-italic: true;
+            vertical-alignment: center;
+        }
+
+        if !root.cell.is-null && root.cell.data-type == "bool": AppBadge {
+            text: root.cell.text;
+            badge-color: root.cell.text == "true" ? #10B981 : #64748B;
+            y: (parent.height - self.height) / 2;
+        }
+
+        if !root.cell.is-null && root.cell.data-type != "bool": Text {
+            text: root.cell.text;
+            color: root.is-selected ? #FFFFFF : (
+                root.cell.data-type == "int" || root.cell.data-type == "numeric" ? #38BDF8 :
+                root.cell.data-type == "uuid" ? #E2E8F0 : #F4F4F5);
+            font-family: root.style.font-family;
+            font-size: root.style.font-size;
+            horizontal-alignment: (root.cell.data-type == "int" || root.cell.data-type == "numeric") ? right : left;
+            vertical-alignment: center;
+            overflow: elide;
+        }
+    }
+
+    // Cell right divider
+    Rectangle {
+        x: parent.width - 1px;
+        y: 0;
+        width: 1px;
+        height: parent.height;
+        background: root.style.border-subtle;
+    }
+}

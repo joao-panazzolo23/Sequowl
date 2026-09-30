@@ -1,0 +1,122 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { VerticalBox, Button, HorizontalBox } from "std-widgets.slint";
+import { IconData } from "shared/icon-data.slint";
+import { Sidebar } from "features/sidebar/components/sidebar.slint";
+import { AppFrame } from "features/sidebar/pages/app-frame.slint";
+import { PanelPage } from "features/sidebar/enums/panel-page.slint";
+import { AppSpacings } from "tokens/app-spacing.slint";
+import { TreeNodeData } from "features/sidebar/models/tree-node-model.slint";
+import { AppTheme, AppThemeGlobal } from "themes/theme.slint";
+import {
+    TableColumnData,
+} from "features/terminal/models/table-column-data.slint";
+
+import { TableRowData } from "features/terminal/models/table-row-data.slint";
+
+import { TableCellData } from "features/terminal/models/table-cell-data.slint";
+
+import {
+    TablePaginationInfo,
+} from "features/terminal/models/table-pagination-info.slint";
+
+import { EditorStateData } from "features/sql-editor/models/editor-state-data.slint";
+import { EditorLineData } from "features/sql-editor/models/editor-line-data.slint";
+import { HighlightSpanData } from "features/sql-editor/models/highlight-span-data.slint";
+import { EditorDiagnosticData } from "features/sql-editor/models/editor-diagnostic-data.slint";
+import { CompletionItemData } from "features/sql-editor/models/completion-item-data.slint";
+import { SyntaxKind } from "features/sql-editor/enums/syntax-kind.slint";
+import { CompletionKind } from "features/sql-editor/enums/completion-kind.slint";
+import { DiagnosticSeverity } from "features/sql-editor/enums/diagnostic-severity.slint";
+
+export {
+    TreeNodeData,
+    AppTheme,
+    TableColumnData,
+    TableCellData,
+    TableRowData,
+    TablePaginationInfo,
+    EditorStateData,
+    EditorLineData,
+    HighlightSpanData,
+    EditorDiagnosticData,
+    CompletionItemData,
+    SyntaxKind,
+    CompletionKind,
+    DiagnosticSeverity,
+}
+export component App inherits Window {
+    //minha ideia eh fazer no frame e colocar os botoes de fechar e minimizar na UI
+    no-frame: false;
+    title: "Sequowl";
+    preferred-width: 1260px;
+    preferred-height: 800px;
+    min-width: 900px;
+    min-height: 600px;
+    in-out property <PanelPage> page;
+    in-out property <[TreeNodeData]> database-tree-nodes;
+    in-out property <EditorStateData> editor-state;
+    callback toggle-database-node(string);
+    callback select-database-node(string);
+    callback load-terminal();
+    callback execute-query();
+    callback editor-action(string);
+
+    in-out property <AppTheme> app-theme: AppThemeGlobal.theme;
+    in-out property <[TableColumnData]> table-columns;
+    in-out property <[TableRowData]> table-rows;
+    in-out property <TablePaginationInfo> table-pagination;
+
+    callback table-next-page();
+    callback table-prev-page();
+    callback table-load-more();
+    callback table-set-page-size(int);
+    callback table-toggle-infinite-mode();
+    callback table-sort-column(int);
+    callback table-filter-changed(string);
+    callback table-select-row(int);
+    callback table-refresh();
+
+    HorizontalLayout {
+        padding-top: AppSpacings.large;
+        padding-bottom: AppSpacings.large;
+
+        Sidebar {
+            current-page <=> root.page;
+            page-changed(page) => {
+                root.page = page;
+            }
+
+            items: [
+                { text: "Connections", button-icon: IconData.database, page: PanelPage.Databases },
+                { text: "Query History", button-icon: IconData.history, page: PanelPage.QueryHistory }
+            ];
+        }
+
+        AppFrame {
+            page: page;
+            editor-state: root.editor-state;
+            database-tree-nodes: root.database-tree-nodes;
+            toggle-database-node(id) => { root.toggle-database-node(id); }
+            select-database-node(id) => { root.select-database-node(id); }
+            load-terminal => { root.load-terminal(); }
+            execute-query => { root.execute-query(); }
+            editor-action(intent) => { root.editor-action(intent); }
+
+            table-columns: root.table-columns;
+            table-rows: root.table-rows;
+            // table-pagination: root.table-pagination;
+            table-next-page => { root.table-next-page(); }
+            table-prev-page => { root.table-prev-page(); }
+            table-load-more => { root.table-load-more(); }
+            table-set-page-size(size) => { root.table-set-page-size(size); }
+            table-toggle-infinite-mode => { root.table-toggle-infinite-mode(); }
+            table-sort-column(col) => { root.table-sort-column(col); }
+            table-filter-changed(val) => { root.table-filter-changed(val); }
+            table-select-row(idx) => { root.table-select-row(idx); }
+            table-refresh => { root.table-refresh(); }
+
+            horizontal-stretch: 1;
+            vertical-stretch: 1;
+        }
+    }
+}

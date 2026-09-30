@@ -1,0 +1,73 @@
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { MainArea } from "../components/main-area.slint";
+import { PanelPage } from "../enums/panel-page.slint";
+import { TreeNodeData } from "../models/tree-node-model.slint";
+import { EditorStateData } from "../../sql-editor/models/editor-state-data.slint";
+
+import { TableColumnData } from "../../terminal/models/table-column-data.slint";
+import { TableRowData } from "../../terminal/models/table-row-data.slint";
+import {
+    TablePaginationInfo,
+} from "../../terminal/models/table-pagination-info.slint";
+
+
+
+export component AppFrame inherits Rectangle {
+    in-out property <PanelPage> page;
+    in property <[TreeNodeData]> database-tree-nodes;
+    in property <EditorStateData> editor-state;
+    callback toggle-database-node(string);
+    callback select-database-node(string);
+    callback load-terminal();
+    callback execute-query();
+    callback editor-action(string);
+
+    in property <[TableColumnData]> table-columns;
+    in property <[TableRowData]> table-rows;
+    in property <TablePaginationInfo> table-pagination;
+
+    callback table-next-page();
+    callback table-prev-page();
+    callback table-load-more();
+    callback table-set-page-size(int);
+    callback table-toggle-infinite-mode();
+    callback table-sort-column(int);
+    callback table-filter-changed(string);
+    callback table-select-row(int);
+    callback table-refresh();
+
+    background: transparent;
+
+    HorizontalLayout {
+        padding-top: AppSpacings.large;
+        padding-bottom: AppSpacings.large;
+        padding-right: AppSpacings.large;
+
+        MainArea {
+            selected-page: root.page;
+            editor-state: root.editor-state;
+            database-tree-nodes: root.database-tree-nodes;
+            toggle-database-node(id) => { root.toggle-database-node(id); }
+            select-database-node(id) => { root.select-database-node(id); }
+            load-terminal => { root.load-terminal(); }
+            execute-query => { root.execute-query(); }
+            editor-action(intent) => { root.editor-action(intent); }
+
+            table-columns: root.table-columns;
+            table-rows: root.table-rows;
+            // table-pagination: root.table-pagination;
+            table-next-page => { root.table-next-page(); }
+            table-prev-page => { root.table-prev-page(); }
+            table-load-more => { root.table-load-more(); }
+            table-set-page-size(size) => { root.table-set-page-size(size); }
+            table-toggle-infinite-mode => { root.table-toggle-infinite-mode(); }
+            table-sort-column(col) => { root.table-sort-column(col); }
+            table-filter-changed(val) => { root.table-filter-changed(val); }
+            table-select-row(idx) => { root.table-select-row(idx); }
+            table-refresh => { root.table-refresh(); }
+
+            horizontal-stretch: 1;
+            vertical-stretch: 1;
+        }
+    }
+}

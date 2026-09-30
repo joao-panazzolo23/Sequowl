@@ -1,0 +1,42 @@
+import { ButtonStyle } from "../models/button-style.slint";
+
+export component AppButton inherits Rectangle {
+    in property <string> text;
+    in property <ButtonStyle> style;
+    in property <bool> enabled: true;
+    callback clicked();
+
+    background: !root.enabled ? root.style.background.transparentize(60%) : (touch-area.has-hover ? (touch-area.pressed ? root.style.background.darker(15%) : root.style.background.brighter(15%)) : root.style.background);
+    border-radius: root.style.border-radius;
+    border-width: root.style.border-width;
+    border-color: root.style.border-color;
+    clip: true;
+
+    HorizontalLayout {
+        padding-left: root.style.padding-left;
+        padding-right: root.style.padding-right;
+        padding-top: root.style.padding-top;
+        padding-bottom: root.style.padding-bottom;
+        alignment: center;
+
+        Text {
+            text: root.text;
+            color: !root.enabled ? root.style.foreground.transparentize(50%) : root.style.foreground;
+            font-family: root.style.font-family;
+            font-size: root.style.font-size;
+            font-weight: root.style.font-weight;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    touch-area := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: root.enabled ? pointer : default;
+        clicked => {
+            if root.enabled {
+                root.clicked();
+            }
+        }
+    }
+}

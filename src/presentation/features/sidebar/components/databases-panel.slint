@@ -1,0 +1,45 @@
+import { ListTreeView } from "list-tree-view.slint";
+import { TreeNodeData } from "../models/tree-node-model.slint";
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppTypography } from "../../../tokens/app-typography.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+
+export component DatabasesPanel inherits Rectangle {
+    in property <[TreeNodeData]> tree-nodes;
+    callback toggle-node(string);
+    callback select-node(string);
+
+    background: transparent;
+
+    VerticalLayout {
+        padding-top: AppSpacings.small;
+        padding-bottom: AppSpacings.small;
+        padding-left: AppSpacings.small;
+        padding-right: AppSpacings.small;
+        spacing: AppSpacings.small;
+
+        HorizontalLayout {
+            padding-left: AppSpacings.small;
+            padding-right: AppSpacings.small;
+            padding-top: AppSpacings.extra-small;
+            padding-bottom: AppSpacings.extra-small;
+
+            Text {
+                text: "DATABASES";
+                font-family: AppTypography.title-font;
+                font-size: AppTypography.caption-size;
+                font-weight: 700;
+                color: AppColors.text-muted;
+                letter-spacing: 1px;
+                vertical-alignment: center;
+            }
+        }
+
+        ListTreeView {
+            vertical-stretch: 1;
+            nodes: root.tree-nodes;
+            toggle-node(id) => { root.toggle-node(id); }
+            select-node(id) => { root.select-node(id); }
+        }
+    }
+}

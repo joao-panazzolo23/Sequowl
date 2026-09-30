@@ -1,0 +1,9 @@
+import { SyntaxKind } from "../enums/syntax-kind.slint";
+
+export struct HighlightSpanData {
+    row: int,
+    column: int,
+    length: int,
+    kind: SyntaxKind,
+    text: string,
+}

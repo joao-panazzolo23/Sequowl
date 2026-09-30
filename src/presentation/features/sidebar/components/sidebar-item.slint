@@ -1,0 +1,42 @@
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppRadius } from "../../../tokens/app-radius.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+
+export component SidebarItem inherits Rectangle {
+    in property <string> text;
+    in property <image> button-icon;
+    in-out property <bool> selected:false;
+
+    callback clicked();
+
+    height: 36px;
+    border-radius: AppRadius.default;
+    background: selected
+        ? AppColors.surface-selected
+        : transparent;
+
+    TouchArea {
+        height: parent.height;
+        width: parent.width;
+        mouse-cursor: pointer;
+        clicked => {
+            root.clicked();
+        }
+    }
+
+    HorizontalLayout {
+        padding: AppSpacings.small;
+        // spacing: SpacingTokens.small;
+        alignment: center;
+
+        Image {
+            vertical-alignment: center;
+            horizontal-alignment: center;
+            source: root.button-icon;
+            width: 18px;
+            height: 18px;
+            colorize: AppColors.icons;
+        }
+    }
+}

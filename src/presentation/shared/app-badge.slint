@@ -1,0 +1,32 @@
+import { AppColors } from "../tokens/app-colors.slint";
+import { AppRadius } from "../tokens/app-radius.slint";
+import { AppTypography } from "../tokens/app-typography.slint";
+
+export component AppBadge inherits Rectangle {
+    in property <string> text;
+    in property <color> badge-color: AppColors.text-muted;
+    in property <string> font-family: AppTypography.body-font;
+    in property <length> font-size: 10px;
+
+    height: 18px;
+    border-radius: AppRadius.default;
+    background: root.badge-color.transparentize(82%);
+    border-width: 1px;
+    border-color: root.badge-color.transparentize(65%);
+
+    HorizontalLayout {
+        padding-left: 6px;
+        padding-right: 6px;
+        alignment: center;
+
+        Text {
+            text: root.text;
+            color: root.badge-color;
+            font-family: root.font-family;
+            font-size: root.font-size;
+            font-weight: 700;
+            vertical-alignment: center;
+            horizontal-alignment: center;
+        }
+    }
+}

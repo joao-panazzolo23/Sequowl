@@ -1,0 +1,53 @@
+import { InputStyle } from "../models/input-style.slint";
+
+export component AppInput inherits Rectangle {
+    in-out property <string> text <=> input.text;
+    in property <string> placeholder: "";
+    in property <InputStyle> style;
+    in property <length> font-size: root.style.font-size;
+    in property <bool> enabled: true;
+    in property <bool> multi-line: false;
+    callback edited(string);
+    callback accepted(string);
+
+    background: root.style.background;
+    border-radius: root.style.border-radius;
+    border-width: root.style.border-width;
+    border-color: input.has-focus ? root.style.foreground.transparentize(50%) : root.style.border-color;
+    clip: true;
+
+    HorizontalLayout {
+        padding-left: root.style.padding-left;
+        padding-right: root.style.padding-right;
+        padding-top: root.style.padding-top;
+        padding-bottom: root.style.padding-bottom;
+        alignment: stretch;
+
+        input := TextInput {
+            color: root.style.foreground;
+            font-family: root.style.font-family;
+            font-size: root.font-size;
+            vertical-alignment: root.multi-line ? top : center;
+            wrap: root.multi-line ? TextWrap.word-wrap : TextWrap.no-wrap;
+            single-line: !root.multi-line;
+            enabled: root.enabled;
+
+            edited => {
+                root.edited(self.text);
+            }
+            accepted => {
+                root.accepted(self.text);
+            }
+        }
+    }
+
+    if root.text == "" && !input.has-focus: Text {
+        x: root.style.padding-left;
+        y: root.multi-line ? root.style.padding-top : (root.height - self.height) / 2;
+        text: root.placeholder;
+        color: root.style.foreground.transparentize(60%);
+        font-family: root.style.font-family;
+        font-size: root.font-size;
+        vertical-alignment: root.multi-line ? top : center;
+    }
+}

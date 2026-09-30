@@ -1,0 +1,12 @@
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppRadius } from "../../../tokens/app-radius.slint";
+
+export component SidebarPanel inherits Rectangle {
+    in-out property <length> component-width: 240px;
+    width: root.component-width;
+    border-radius: AppRadius.default;
+    background: AppColors.surface;
+    clip: true;
+
+    @children
+}

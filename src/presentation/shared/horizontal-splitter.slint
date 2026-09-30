@@ -1,0 +1,20 @@
+import { AppSpacings } from "../tokens/app-spacing.slint";
+export component HorizontalSplitter inherits TouchArea {
+    width: 6px;
+    mouse-cursor: ew-resize;
+
+    Rectangle {
+        width: 1px;
+        height: 100%;
+        x: (parent.width - self.width) / 2;
+        background: transparent;
+    }
+
+    callback moved-by(length);
+
+    moved => {
+        if (self.pressed) {
+            root.moved-by(self.mouse-x - self.pressed-x);
+        }
+    }
+}

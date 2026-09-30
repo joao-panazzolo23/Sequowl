@@ -1,0 +1,85 @@
+import { TableStyle } from "../../../models/table-style.slint";
+import { ButtonStyle } from "../../../models/button-style.slint";
+import { InputStyle } from "../../../models/input-style.slint";
+import { TextStyle } from "../../../models/text-style.slint";
+import { AppThemeGlobal } from "../../../themes/theme.slint";
+import { AppButton } from "../../../shared/app-button.slint";
+import { AppInput } from "../../../shared/app-input.slint";
+import { AppBadge } from "../../../shared/app-badge.slint";
+import { ScrollView } from "std-widgets.slint";
+import { SortDirection } from "../../terminal/enums/sort-direction.slint";
+import { TableColumnData } from "../models/table-column-data.slint";
+import { TableDataCell } from "../components/table-data-cell.slint";
+import { TableRowData } from "../models/table-row-data.slint";
+
+
+export component TableRowItem inherits Rectangle {
+    in property <TableRowData> row-data;
+    in property <[TableColumnData]> columns;
+    in property <TableStyle> style;
+    in property <bool> is-odd;
+    callback clicked();
+
+    height: root.style.row-height;
+    background: root.row-data.is-selected ? root.style.row-selected-background : (
+        touch-area.has-hover ? root.style.row-hover-background : (
+        root.is-odd ? root.style.row-alt-background : root.style.row-background));
+
+    if root.row-data.is-selected: Rectangle {
+        x: 0;
+        y: 0;
+        width: 3px;
+        height: parent.height;
+        background: root.style.accent-color;
+    }
+
+    HorizontalLayout {
+        // Row number column (fixed 52px)
+        Rectangle {
+            width: 52px;
+            height: root.style.row-height;
+            background: root.row-data.is-selected ? root.style.row-selected-background.darker(10%) : root.style.header-background.transparentize(40%);
+
+            Text {
+                text: root.row-data.row-num;
+                color: root.row-data.is-selected ? #FFFFFF : root.style.null-color;
+                font-family: root.style.font-family;
+                font-size: root.style.caption-size;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            // Divider
+            Rectangle {
+                x: parent.width - 1px;
+                y: 0;
+                width: 1px;
+                height: parent.height;
+                background: root.style.border-color;
+            }
+        }
+
+        // Data cells
+        for cell[col-idx] in root.row-data.cells: TableDataCell {
+            cell: cell;
+            cell-width: root.columns[col-idx].width;
+            style: root.style;
+            is-selected: root.row-data.is-selected;
+        }
+    }
+
+    // Bottom border divider
+    Rectangle {
+        x: 0;
+        y: parent.height - 1px;
+        width: parent.width;
+        height: 1px;
+        background: root.style.border-subtle;
+    }
+
+    touch-area := TouchArea {
+        clicked => {
+            root.clicked();
+        }
+    }
+}

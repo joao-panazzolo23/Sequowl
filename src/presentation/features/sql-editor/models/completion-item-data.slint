@@ -1,0 +1,8 @@
+import { CompletionKind } from "../enums/completion-kind.slint";
+
+export struct CompletionItemData {
+    label: string,
+    detail: string,
+    kind: CompletionKind,
+    insert-text: string,
+}

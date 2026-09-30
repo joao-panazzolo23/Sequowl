@@ -1,0 +1,126 @@
+import { AboutSlint, VerticalBox, HorizontalBox } from "std-widgets.slint";
+import { HorizontalSplitter } from "../../../shared/horizontal-splitter.slint";
+import { VerticalSplitter } from "../../../shared/vertical-splitter.slint";
+import { SqlEditor } from "../../sql-editor/components/sql-editor.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { SidebarPanel } from "sidebar-panel.slint";
+import { PanelPage } from "../enums/panel-page.slint";
+import { DatabasesPanel } from "databases-panel.slint";
+import { TreeNodeData } from "../models/tree-node-model.slint";
+
+
+import { TableColumnData } from "../../terminal/models/table-column-data.slint";
+import { TableRowData } from "../../terminal/models/table-row-data.slint";
+import {
+    TablePaginationInfo,
+} from "../../terminal/models/table-pagination-info.slint";
+import { Terminal } from "../../terminal/components/terminal.slint";
+import { TextStyle } from "../../../models/text-style.slint";
+import { AppText } from "../../../shared/app-text.slint";
+import { AppThemeGlobal } from "../../../themes/theme.slint";
+import { EditorStateData } from "../../sql-editor/models/editor-state-data.slint";
+
+export component MainArea inherits Rectangle {
+    in-out property <length> panel-width: 240px;
+    in-out property <length> editor-height: 400px;
+    in-out property <PanelPage> selected-page: PanelPage.Databases;
+    in-out property <bool> is-terminal-loaded: false;
+    in property <EditorStateData> editor-state;
+    in property <[TreeNodeData]> database-tree-nodes;
+    callback toggle-database-node(string);
+    callback select-database-node(string);
+    callback load-terminal();
+    callback execute-query();
+    callback editor-action(string);
+
+    in property <[TableColumnData]> table-columns;
+    in property <[TableRowData]> table-rows;
+    in property <TablePaginationInfo> table-pagination;
+    in property <TextStyle> text-caption-style: AppThemeGlobal.theme.text-caption;
+
+    callback table-next-page();
+    callback table-prev-page();
+    callback table-load-more();
+    callback table-set-page-size(int);
+    callback table-toggle-infinite-mode();
+    callback table-sort-column(int);
+    callback table-filter-changed(string);
+    callback table-select-row(int);
+    callback table-refresh();
+
+    HorizontalLayout {
+        padding-top: AppSpacings.large;
+        spacing: 0;
+
+        SidebarPanel {
+            component-width: root.panel-width;
+
+            if root.selected-page == PanelPage.Databases: DatabasesPanel {
+                tree-nodes: root.database-tree-nodes;
+                toggle-node(id) => { root.toggle-database-node(id); }
+                select-node(id) => { root.select-database-node(id); }
+            }
+
+            if root.selected-page == PanelPage.QueryHistory: Rectangle {
+                width: parent.width;
+                height: parent.height;
+                background: Colors.blue;
+            }
+        }
+
+        //tem uns bugzinhos visuais nessa tela, provavelmente pq aq o max eh um valor disparelho em relacao ao
+        // max de baixo, verificar dps
+        HorizontalSplitter {
+            moved-by(delta) => {
+                root.panel-width = max(
+                    180px,
+                    min(
+                        500px,
+                        root.panel-width + delta));
+            }
+        }
+
+        // Workspace
+        VerticalLayout {
+            horizontal-stretch: 1;
+
+            SqlEditor {
+                editor-height: editor-height;
+                state: root.editor-state;
+                action(intent) => { root.editor-action(intent); }
+                execute => {
+                    if !root.is-terminal-loaded {
+                        root.is-terminal-loaded = true;
+                        root.load-terminal();
+                    }
+                    root.execute-query();
+                }
+            }
+
+            // Splitter
+            VerticalSplitter {
+                moved-by(delta) => {
+                    root.editor-height = max(
+                        150px,
+                        root.editor-height + delta);
+                }
+            }
+
+            Terminal {
+                columns: root.table-columns;
+                rows: root.table-rows;
+                pagination: root.table-pagination;
+                // next-page => { root.table-next-page(); }
+                // prev-page => { root.table-prev-page(); }
+                // load-more => { root.table-load-more(); }
+                // set-page-size(size) => { root.table-set-page-size(size); }
+                // toggle-infinite-mode => { root.table-toggle-infinite-mode(); }
+                sort-column(col) => { root.table-sort-column(col); }
+                // filter-changed(val) => { root.table-filter-changed(val); }
+                // select-row(idx) => { root.table-select-row(idx); }
+                refresh => { root.table-refresh(); }
+            }
+        }
+    }
+}

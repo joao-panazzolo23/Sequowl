@@ -1,0 +1,18 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+    "build": {
+        "mode": "primary",
+        "model": "ollama/qwen2.5-coder:14b",
+        "prompt": "{file:./prompts/build.md}",
+        "description": "Primary implementation agent.",
+        "tools": {
+            "write": true,
+            "edit": true,
+            "bash": true
+        },
+        "permission": {
+            "edit": "allow",
+            "bash": "allow"
+        }
+    }
+}

@@ -1,0 +1,139 @@
+import { ListView } from "std-widgets.slint";
+import { TreeNodeData } from "../models/tree-node-model.slint";
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppTypography } from "../../../tokens/app-typography.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { AppRadius } from "../../../tokens/app-radius.slint";
+import { IconData } from "../../../shared/icon-data.slint";
+
+export component ListTreeView inherits Rectangle {
+    in property <[TreeNodeData]> nodes;
+    callback toggle-node(string);
+    callback select-node(string);
+
+    background: transparent;
+
+    ListView {
+        for node in root.nodes: Rectangle {
+            height: 30px;
+            border-radius: AppRadius.default;
+            background: node.is-selected ? AppColors.surface-selected : (touch-area.has-hover ? AppColors.surface-hover : transparent);
+
+            HorizontalLayout {
+                padding-left: AppSpacings.small + (node.level * 14px);
+                padding-right: AppSpacings.small;
+                spacing: AppSpacings.extra-small;
+                alignment: start;
+
+                // Chevron or spacer
+                Rectangle {
+                    width: 14px;
+                    height: 14px;
+                    vertical-stretch: 0;
+                    y: (parent.height - self.height) / 2;
+
+                    if !node.is-leaf: Image {
+                        source: IconData.chevron;
+                        width: 14px;
+                        height: 14px;
+                        transform-rotation: node.expanded ? 0deg : 270deg;
+                        colorize: AppColors.text-muted;
+                    }
+                }
+
+                // Node type icon / indicator
+                Rectangle {
+                    width: 16px;
+                    height: 16px;
+                    vertical-stretch: 0;
+                    y: (parent.height - self.height) / 2;
+
+                    if node.kind == "database": Image {
+                        source: IconData.database;
+                        width: 14px;
+                        height: 14px;
+                        colorize: AppColors.accent;
+                    }
+
+                    if node.kind == "schema": Rectangle {
+                        width: 16px;
+                        height: 16px;
+                        border-radius: AppRadius.default;
+                        background: #3b82f6.transparentize(80%);
+                        Text {
+                            text: "S";
+                            font-family: AppTypography.title-font;
+                            font-size: 9px;
+                            font-weight: 700;
+                            color: #60a5fa;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+
+                    if node.kind == "table": Rectangle {
+                        width: 16px;
+                        height: 16px;
+                        border-radius: AppRadius.default;
+                        background: #10b981.transparentize(80%);
+                        Text {
+                            text: "T";
+                            font-family: AppTypography.title-font;
+                            font-size: 9px;
+                            font-weight: 700;
+                            color: #34d399;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+
+                    if node.kind == "column": Rectangle {
+                        width: 16px;
+                        height: 16px;
+                        border-radius: AppRadius.default;
+                        background: #f59e0b.transparentize(80%);
+                        Text {
+                            text: "c";
+                            font-family: AppTypography.title-font;
+                            font-size: 9px;
+                            font-weight: 700;
+                            color: #fbbf24;
+                            horizontal-alignment: center;
+                            vertical-alignment: center;
+                        }
+                    }
+                }
+
+                // Name
+                Text {
+                    text: node.name;
+                    color: node.is-selected ? AppColors.text-primary : (touch-area.has-hover ? AppColors.text-primary : AppColors.text-secondary);
+                    font-family: AppTypography.body-font;
+                    font-size: AppTypography.body-size;
+                    vertical-alignment: center;
+                    overflow: elide;
+                    horizontal-stretch: 1;
+                }
+
+                // Extra details (like type or key)
+                if node.extra != "": Text {
+                    text: node.extra;
+                    color: AppColors.text-muted;
+                    font-family: AppTypography.body-font;
+                    font-size: AppTypography.caption-size;
+                    vertical-alignment: center;
+                    overflow: elide;
+                }
+            }
+
+            touch-area := TouchArea {
+                clicked => {
+                    root.select-node(node.id);
+                    if !node.is-leaf {
+                        root.toggle-node(node.id);
+                    }
+                }
+            }
+        }
+    }
+}

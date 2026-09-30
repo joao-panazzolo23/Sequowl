@@ -1,0 +1,68 @@
+import { TableColumnData } from "../models/table-column-data.slint";
+import { AppBadge } from "../../../shared/app-badge.slint";
+import { TableStyle } from "../../../models/table-style.slint";
+import { SortDirection } from "../enums/sort-direction.slint";
+
+export component TableHeaderCell inherits Rectangle {
+    in property <TableColumnData> column-data;
+    in property <TableStyle> style;
+    callback clicked();
+
+    width: root.column-data.width;
+    height: root.style.header-height;
+    background: touch-area.has-hover ? root.style.row-hover-background : root.style.header-background;
+    clip: true;
+
+    HorizontalLayout {
+        padding-left: root.style.cell-padding-horizontal;
+        padding-right: root.style.cell-padding-horizontal;
+        spacing: 6px;
+        alignment: start;
+
+        Text {
+            text: root.column-data.name;
+            color: touch-area.has-hover ? #FFFFFF : root.style.header-foreground;
+            font-family: root.style.font-family;
+            font-size: root.style.font-size;
+            font-weight: 700;
+            vertical-alignment: center;
+            overflow: elide;
+        }
+
+        // Data type badge
+        AppBadge {
+            text: root.column-data.data-type;
+            badge-color: root.column-data.data-type == "uuid" ? #A78BFA :
+                root.column-data.data-type == "int" || root.column-data.data-type == "numeric" ? #38BDF8 :
+                root.column-data.data-type == "bool" ? #34D399 :
+                root.column-data.data-type == "timestamp" ? #FBBF24 : #94A3B8;
+            font-size: root.style.caption-size;
+            y: (parent.height - self.height) / 2;
+        }
+
+        // Sort indicator
+        if root.column-data.sort-direction != SortDirection.None: Text {
+            text: root.column-data.sort-direction == SortDirection.Ascending ? "▲" : "▼";
+            color: root.style.accent-color;
+            font-family: root.style.font-family;
+            font-size: 10px;
+            vertical-alignment: center;
+        }
+    }
+
+    // Right border divider
+    Rectangle {
+        x: parent.width - 1px;
+        y: 6px;
+        width: 1px;
+        height: parent.height - 12px;
+        background: root.style.border-subtle;
+    }
+
+    touch-area := TouchArea {
+        mouse-cursor: pointer;
+        clicked => {
+            root.clicked();
+        }
+    }
+}

@@ -1,0 +1,9 @@
+import { DiagnosticSeverity } from "../enums/diagnostic-severity.slint";
+
+export struct EditorDiagnosticData {
+    severity: DiagnosticSeverity,
+    message: string,
+    row: int,
+    column: int,
+    length: int,
+}

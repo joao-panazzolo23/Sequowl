@@ -1,0 +1,9 @@
+import { TextStyle } from "../models/text-style.slint";
+export component AppText inherits Text {
+    in property <TextStyle> style;
+
+    font-family: style.font-family;
+    font-size: style.font-size;
+    font-weight: style.font-weight;
+    color: style.color;
+}

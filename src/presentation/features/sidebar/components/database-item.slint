@@ -1,0 +1,66 @@
+import { IconData } from "../../../shared/icon-data.slint";
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { AppTypography } from "../../../tokens/app-typography.slint";
+
+export component DatabaseItem inherits VerticalLayout {
+    in property <string> title;
+    in property <int> level: 0;
+    in-out property <bool> expanded: false;
+
+    spacing: 0;
+
+    Rectangle {
+        height: 30px;
+        width: parent.width;
+        background: item-touch.has-hover ? AppColors.surface-hover : transparent;
+
+        HorizontalLayout {
+            padding-left: AppSpacings.small + (root.level * AppSpacings.medium);
+            padding-right: AppSpacings.small;
+            spacing: AppSpacings.extra-small;
+            alignment: center;
+
+            Rectangle {
+                width: 14px;
+                height: 14px;
+                vertical-stretch: 0;
+
+                Image {
+                    source: IconData.chevron;
+                    width: 14px;
+                    height: 14px;
+                    transform-rotation: root.expanded ? 0deg : 270deg;
+                    colorize: AppColors.text-muted;
+                }
+            }
+
+            Text {
+                text: root.title;
+                color: AppColors.text-secondary;
+                font-family: AppTypography.body-font;
+                font-size: AppTypography.body-size;
+                vertical-alignment: center;
+                overflow: elide;
+                horizontal-stretch: 1;
+            }
+        }
+
+        item-touch := TouchArea {
+            clicked => {
+                root.expanded = !root.expanded;
+            }
+        }
+    }
+
+    Rectangle {
+        width: parent.width;
+        height: root.expanded ? self.preferred-height : 0px;
+        clip: true;
+
+        VerticalLayout {
+            width: parent.width;
+            @children
+        }
+    }
+}

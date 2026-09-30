@@ -1,0 +1,191 @@
+import { TableStyle } from "../../../models/table-style.slint";
+import { AppRadius } from "../../../tokens/app-radius.slint";
+import { ButtonStyle } from "../../../models/button-style.slint";
+import { InputStyle } from "../../../models/input-style.slint";
+import { TextStyle } from "../../../models/text-style.slint";
+import { AppThemeGlobal } from "../../../themes/theme.slint";
+import { AppButton } from "../../../shared/app-button.slint";
+import { AppInput } from "../../../shared/app-input.slint";
+import { AppBadge } from "../../../shared/app-badge.slint";
+import { ScrollView } from "std-widgets.slint";
+import { SortDirection } from "../../terminal/enums/sort-direction.slint";
+import { TableColumnData } from "../models/table-column-data.slint";
+import { TablePaginationInfo } from "../models/table-pagination-info.slint";
+import { TableRowData } from "../models/table-row-data.slint";
+import { TableHeaderCell } from "../components/table-header-cell.slint";
+import { TableRowItem } from "../components/table-row-item.slint";
+
+export component Terminal inherits Rectangle {
+    //stupid encapsulation misalignment.
+    // AI's are a fucking dumb trainee that makes everything in 10 minutes
+    // these two fellas should be encapsulated INSIDE pagination info.
+    in property <[TableColumnData]> columns;
+    in property <[TableRowData]> rows;
+    in property <TablePaginationInfo> pagination: {
+        current-page: 1,
+        total-pages: 1,
+        page-size: 50,
+        loaded-count: 0,
+        total-count: 0,
+        execution-time-ms: 0,
+        is-infinite-scroll: false,
+        // status-message: "Ready",
+    };
+
+    //trash implementation
+    in property <TableStyle> table-style: AppThemeGlobal.theme.table;
+    in property <ButtonStyle> button-style: AppThemeGlobal.theme.button;
+    in property <ButtonStyle> button-secondary-style: AppThemeGlobal.theme.button-secondary;
+    in property <InputStyle> input-style: AppThemeGlobal.theme.input;
+
+    callback set-page-size(int);
+    callback sort-column(int);
+    callback refresh();
+
+    vertical-stretch: 1;
+    min-height: 220px;
+    border-radius: AppRadius.default;
+    border-width: 1px;
+    border-color: root.table-style.border-color;
+    background: root.table-style.background;
+    clip: true;
+
+    VerticalLayout {
+        spacing: 0;
+
+        Rectangle {
+            height: root.table-style.header-height;
+            background: root.table-style.header-background;
+            clip: true;
+
+            HorizontalLayout {
+                x: table-scroll.viewport-x;
+                spacing: 0;
+
+                Rectangle {
+                    width: 52px;
+                    height: root.table-style.header-height;
+                    background: root.table-style.header-background;
+
+                    AppButton {
+                        // padding: 10px;
+                        text: "↻";
+                        background: transparent;
+                        border-color: transparent;
+                        style: root.button-secondary-style;
+                        clicked => {
+                            root.refresh();
+                        }
+                    }
+
+                    Rectangle {
+                        x: parent.width - 1px;
+                        y: 0;
+                        width: 1px;
+                        height: parent.height;
+                        background: root.table-style.border-color;
+                    }
+                }
+
+                for col[col-idx] in root.columns: TableHeaderCell {
+                    column-data: col;
+                    style: root.table-style;
+                    clicked => {
+                        root.sort-column(col-idx);
+                    }
+                }
+            }
+
+            Rectangle {
+                x: 0;
+                y: parent.height - 1px;
+                width: parent.width;
+                height: 1px;
+                background: root.table-style.border-color;
+            }
+        }
+
+        table-scroll := ScrollView {
+            vertical-stretch: 1;
+
+            VerticalLayout {
+                spacing: 0;
+                alignment: start;
+
+                // Data rows
+                for row[row-idx] in root.rows: TableRowItem {
+                    row-data: row;
+                    columns: root.columns;
+                    style: root.table-style;
+                    is-odd: mod(row-idx, 2) == 1;
+                    // clicked => {
+                    //     root.select-row(row.row-num);
+                    // }
+                }
+
+                Rectangle {
+                    height: 48px;
+                    background: root.table-style.background;
+
+                    HorizontalLayout {
+                        alignment: center;
+                        spacing: 12px;
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            height: 38px;
+            background: root.table-style.header-background;
+
+            Rectangle {
+                x: 0;
+                y: 0;
+                width: parent.width;
+                height: 1px;
+                background: root.table-style.border-color;
+            }
+
+            HorizontalLayout {
+                padding-left: 14px;
+                padding-right: 14px;
+                spacing: 16px;
+                alignment: stretch;
+
+                // Status & Metrics
+                HorizontalLayout {
+                    spacing: 10px;
+                    alignment: start;
+                    horizontal-stretch: 1;
+
+                    // Green status dot
+                    Rectangle {
+                        width: 8px;
+                        height: 8px;
+                        border-radius: AppRadius.default;
+                        background: #10B981;
+                        y: (parent.height - self.height) / 2;
+                    }
+
+                    // Text {
+                    //     text: "STATUS: READY";
+                    //     color: #10B981;
+                    //     font-family: root.table-style.font-family;
+                    //     font-size: 11px;
+                    //     font-weight: 700;
+                    //     vertical-alignment: center;
+                    // }
+
+                    Text {
+                        text: "•  Execution: " + root.pagination.execution-time-ms + "ms";
+                        color: #A1A1AA;
+                        font-family: root.table-style.font-family;
+                        font-size: 11px;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+        }
+    }
+}

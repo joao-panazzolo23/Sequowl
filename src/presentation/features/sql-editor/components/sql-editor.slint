@@ -1,0 +1,375 @@
+import { AppColors } from "../../../tokens/app-colors.slint";
+import { AppRadius } from "../../../tokens/app-radius.slint";
+import { AppSpacings } from "../../../tokens/app-spacing.slint";
+import { AppThemeGlobal } from "../../../themes/theme.slint";
+import { EditorStyle } from "../../../models/editor-style.slint";
+import { EditorStateData } from "../models/editor-state-data.slint";
+import { CompletionKind } from "../enums/completion-kind.slint";
+import { SyntaxKind } from "../enums/syntax-kind.slint";
+
+export component SqlEditor inherits Rectangle {
+    forward-focus: editor-scope;
+
+    in-out property <length> editor-height: 400px;
+    in property <EditorStateData> state;
+    callback action(string);
+    callback execute();
+
+    in property <length> min-editor-font-size: 9px;
+    in property <length> max-editor-font-size: 28px;
+    in property <length> font-size-step: 1px;
+    in-out property <length> editor-font-size: root.editor-style.font-size;
+    in property <EditorStyle> editor-style: AppThemeGlobal.theme.editor;
+
+    in property <length> completion-item-height: 20px;
+    in property <length> completion-max-height: 168px;
+    in property <length> completion-width: 280px;
+    in property <int> completion-page-size: 8;
+
+    // Geometry derived from the widget size, sent to the controller so it can
+    // keep the caret on screen.
+    private property <length> text-origin-x: root.editor-style.gutter-width + root.editor-style.padding-left;
+    private property <int> visible-rows: max(1, floor((self.height - root.editor-style.padding-top) / root.editor-style.line-height));
+    private property <int> visible-columns: max(1, floor((self.width - root.text-origin-x - root.editor-style.padding-right) / root.editor-style.char-width));
+    private property <int> last-viewport-rows: 0;
+    private property <int> last-viewport-columns: 0;
+    private property <int> completion-window: max(0, min(root.state.completion-selected - root.completion-page-size / 2, root.state.completions.length - root.completion-page-size));
+
+    function syntax-color(kind: SyntaxKind) -> brush {
+        if kind == SyntaxKind.Keyword {
+            return root.editor-style.syntax-keyword;
+        }
+        if kind == SyntaxKind.Function {
+            return root.editor-style.syntax-function;
+        }
+        if kind == SyntaxKind.Number || kind == SyntaxKind.Parameter {
+            return root.editor-style.syntax-number;
+        }
+        if kind == SyntaxKind.String {
+            return root.editor-style.syntax-string;
+        }
+        if kind == SyntaxKind.QuotedIdentifier {
+            return root.editor-style.syntax-quoted-identifier;
+        }
+        if kind == SyntaxKind.Comment {
+            return root.editor-style.syntax-comment;
+        }
+        if kind == SyntaxKind.Punctuation || kind == SyntaxKind.Operator {
+            return root.editor-style.syntax-punctuation;
+        }
+        if kind == SyntaxKind.Identifier {
+            return root.editor-style.syntax-identifier;
+        }
+        return root.editor-style.syntax-plain;
+    }
+
+    function selection-start(row: int) -> int {
+        if !root.state.has-selection {
+            return -1;
+        }
+        if row == root.state.selection-start-row {
+            return root.state.selection-start-column;
+        }
+        if row > root.state.selection-start-row && row < root.state.selection-end-row {
+            return 0;
+        }
+        return -1;
+    }
+
+    function selection-end(row: int, line-length: int) -> int {
+        if !root.state.has-selection {
+            return -1;
+        }
+        if row == root.state.selection-end-row {
+            return root.state.selection-end-column;
+        }
+        if row > root.state.selection-start-row && row < root.state.selection-end-row {
+            return line-length;
+        }
+        return -1;
+    }
+
+    function point-at(px: length, py: length) -> string {
+        let row = root.state.scroll-row + max(0, floor((py - root.editor-style.padding-top) / root.editor-style.line-height));
+        let column = root.state.scroll-column + max(0, floor((px - root.text-origin-x) / root.editor-style.char-width));
+        return row + ":" + column;
+    }
+
+    function completion-kind-label(kind: CompletionKind) -> string {
+        if kind == CompletionKind.Column {
+            return "col";
+        } else if kind == CompletionKind.Table {
+            return "tbl";
+        } else if kind == CompletionKind.View {
+            return "view";
+        } else if kind == CompletionKind.Schema {
+            return "sch";
+        } else if kind == CompletionKind.Function {
+            return "fn";
+        } else {
+            return "kw";
+        }
+    }
+
+    function control-action(event: KeyEvent) -> string {
+        if event.text == "a" || event.text == "A" {
+            return "select-all";
+        } else if event.text == "z" || event.text == "Z" {
+            return event.modifiers.shift ? "redo" : "undo";
+        } else if event.text == "y" || event.text == "Y" {
+            return "redo";
+        } else if event.text == " " {
+            return "complete-request";
+        } else if event.text == Key.Home {
+            return "doc-start";
+        } else if event.text == Key.End {
+            return "doc-end";
+        } else if event.text == Key.LeftArrow {
+            return "word-left";
+        } else if event.text == Key.RightArrow {
+            return "word-right";
+        } else if event.text == Key.Backspace {
+            return "delete-word-backward";
+        } else {
+            return "none";
+        }
+    }
+
+    background: AppColors.editor-surface;
+    border-radius: AppRadius.default;
+    border-width: AppSpacings.border-width;
+    border-color: AppColors.border;
+    clip: true;
+
+    changed width => {
+        if root.last-viewport-columns != root.visible-columns {
+            root.last-viewport-columns = root.visible-columns;
+            root.action("viewport:" + root.visible-rows + ":" + root.visible-columns);
+        }
+    }
+    changed height => {
+        if root.last-viewport-rows != root.visible-rows {
+            root.last-viewport-rows = root.visible-rows;
+            root.action("viewport:" + root.visible-rows + ":" + root.visible-columns);
+        }
+    }
+
+    // One rectangle per row: the current line highlight, the selection, the
+    // caret and the gutter. The text is drawn by the span loop below.
+    for line in root.state.lines : Rectangle {
+        x: 0;
+        y: root.editor-style.padding-top + (line.row - root.state.scroll-row) * root.editor-style.line-height;
+        width: root.width;
+        height: root.editor-style.line-height;
+
+        background: line.row == root.state.caret-row ? root.editor-style.current-line-background : Colors.transparent;
+
+        visible: line.row >= root.state.scroll-row && line.row < root.state.scroll-row + root.visible-rows;
+
+        if root.selection-start(line.row) >= 0 : Rectangle {
+            x: root.text-origin-x + (root.selection-start(line.row) - root.state.scroll-column) * root.editor-style.char-width;
+            y: 0;
+            width: max(root.editor-style.caret-width, (root.selection-end(line.row, line.length) - root.selection-start(line.row)) * root.editor-style.char-width);
+            height: parent.height;
+            background: root.editor-style.selection-background;
+        }
+
+        Text {
+            x: 0;
+            y: 0;
+            width: root.editor-style.gutter-width;
+            height: parent.height;
+            text: line.row + 1;
+            color: root.editor-style.gutter-foreground;
+            font-family: root.editor-style.font-family;
+            font-size: root.editor-style.font-size;
+            horizontal-alignment: TextHorizontalAlignment.right;
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+
+        Text {
+            x: root.editor-style.gutter-width;
+            y: 0;
+            width: 6px;
+            height: parent.height;
+            text: "•";
+            color: root.editor-style.diagnostic-error;
+            font-size: root.editor-style.font-size;
+            horizontal-alignment: TextHorizontalAlignment.center;
+            vertical-alignment: TextVerticalAlignment.center;
+            visible: line.row == root.state.caret-row && root.state.error-count > 0;
+        }
+
+        if line.row == root.state.caret-row && !root.state.has-selection : Rectangle {
+            x: root.text-origin-x + (root.state.caret-column - root.state.scroll-column) * root.editor-style.char-width;
+            y: 1px;
+            width: root.editor-style.caret-width;
+            height: parent.height - 2px;
+            background: root.editor-style.caret-color;
+        }
+    }
+
+    for span in root.state.spans : Text {
+        x: root.text-origin-x + (span.column - root.state.scroll-column) * root.editor-style.char-width;
+        y: root.editor-style.padding-top + (span.row - root.state.scroll-row) * root.editor-style.line-height;
+        width: max(0px, span.length * root.editor-style.char-width);
+        height: root.editor-style.line-height;
+        text: span.text;
+        color: root.syntax-color(span.kind);
+        font-family: root.editor-style.font-family;
+        font-size: root.editor-style.font-size;
+        vertical-alignment: TextVerticalAlignment.center;
+        visible: span.row >= root.state.scroll-row && span.row < root.state.scroll-row + root.visible-rows && span.column + span.length > root.state.scroll-column;
+    }
+
+    if root.state.completion-visible : Rectangle {
+        x: min(root.text-origin-x + (root.state.completion-anchor-column - root.state.scroll-column) * root.editor-style.char-width, root.width - root.completion-width - 4px);
+        y: root.editor-style.padding-top + (root.state.completion-anchor-row - root.state.scroll-row + 1) * root.editor-style.line-height;
+        width: root.completion-width;
+        height: min(root.completion-max-height, root.state.completions.length * root.completion-item-height);
+        background: root.editor-style.popup-background;
+        border-color: root.editor-style.popup-border;
+        border-width: 1px;
+        border-radius: AppRadius.default;
+        clip: true;
+
+        for item[index] in root.state.completions : Rectangle {
+            x: 0;
+            y: (index - root.completion-window) * root.completion-item-height;
+            width: parent.width;
+            height: root.completion-item-height;
+            background: index == root.state.completion-selected ? root.editor-style.popup-selected-background : Colors.transparent;
+            visible: index >= root.completion-window && index < root.completion-window + root.completion-page-size;
+
+            TouchArea {
+                x: 0;
+                y: 0;
+                width: parent.width;
+                height: parent.height;
+                clicked => {
+                    root.action("complete-accept:" + index);
+                }
+            }
+
+            Text {
+                x: 6px;
+                y: 0;
+                width: 34px;
+                height: parent.height;
+                text: root.completion-kind-label(item.kind);
+                color: root.editor-style.gutter-foreground;
+                font-family: root.editor-style.font-family;
+                font-size: root.editor-style.font-size;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+
+            Text {
+                x: 42px;
+                y: 0;
+                width: parent.width - 48px;
+                height: parent.height;
+                text: item.label;
+                color: root.editor-style.syntax-plain;
+                font-family: root.editor-style.font-family;
+                font-size: root.editor-style.font-size;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+
+            Text {
+                x: parent.width - 120px;
+                y: 0;
+                width: 114px;
+                height: parent.height;
+                text: item.detail;
+                color: root.editor-style.gutter-foreground;
+                font-family: root.editor-style.font-family;
+                font-size: root.editor-style.font-size;
+                horizontal-alignment: TextHorizontalAlignment.right;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+        }
+    }
+
+    editor-scope := FocusScope {
+        x: 0;
+        y: 0;
+        width: parent.width;
+        height: parent.height;
+        focus-on-click: false;
+
+        input-area := TouchArea {
+            x: 0;
+            y: 0;
+            width: parent.width;
+            height: parent.height;
+
+            clicked => {
+                editor-scope.focus();
+                root.action("pointer:" + root.point-at(self.mouse-x, self.mouse-y));
+            }
+
+            pointer-event(event) => {
+                if event.button == PointerEventButton.left {
+                    if event.kind == PointerEventKind.down {
+                        editor-scope.focus();
+                        root.action("pointer:" + root.point-at(self.mouse-x, self.mouse-y));
+                    } else if event.kind == PointerEventKind.move && self.pressed {
+                        root.action("drag:" + root.point-at(self.mouse-x, self.mouse-y));
+                    }
+                }
+            }
+
+            scroll-event(event) => {
+                if event.modifiers.control {
+                    if event.delta-y > 0 {
+                        root.editor-font-size = min(root.max-editor-font-size, root.editor-font-size + root.font-size-step);
+                    } else if event.delta-y < 0 {
+                        root.editor-font-size = max(root.min-editor-font-size, root.editor-font-size - root.font-size-step);
+                    }
+                } else {
+                    root.action("scroll:" + round(-event.delta-y / root.editor-style.line-height) + ":0");
+                }
+                accept
+            }
+        }
+
+        key-pressed(event) => {
+            if event.modifiers.control {
+                root.action(root.control-action(event));
+            } else if event.text == Key.LeftArrow {
+                root.action(event.modifiers.shift ? "select-left" : "left");
+            } else if event.text == Key.RightArrow {
+                root.action(event.modifiers.shift ? "select-right" : "right");
+            } else if event.text == Key.UpArrow {
+                root.action(event.modifiers.shift ? "select-up" : "up");
+            } else if event.text == Key.DownArrow {
+                root.action(event.modifiers.shift ? "select-down" : "down");
+            } else if event.text == Key.Home {
+                root.action(event.modifiers.shift ? "select-line-start" : "line-start");
+            } else if event.text == Key.End {
+                root.action(event.modifiers.shift ? "select-line-end" : "line-end");
+            } else if event.text == Key.PageUp {
+                root.action("page-up");
+            } else if event.text == Key.PageDown {
+                root.action("page-down");
+            } else if event.text == Key.Backspace {
+                root.action(event.modifiers.alt ? "delete-word-backward" : "backspace");
+            } else if event.text == Key.Delete {
+                root.action("delete");
+            } else if event.text == Key.Return {
+                root.action("newline");
+            } else if event.text == Key.Tab {
+                root.action(root.state.completion-visible ? "complete-next" : "indent");
+            } else if event.text == Key.Escape {
+                root.action("complete-dismiss");
+            } else if event.text == Key.F5 {
+                root.execute();
+            } else if event.text != "" {
+                root.action("text:" + event.text);
+            } else {
+                return reject;
+            }
+            accept
+        }
+    }
+}
