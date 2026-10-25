@@ -4178,8 +4178,10 @@ checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
 name = "sequowl"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "slint",
  "slint-build",
+ "tokio-async",
 ]
 
 [[package]]
@@ -4873,6 +4875,12 @@ name = "tinyvec_macros"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+
+[[package]]
+name = "tokio-async"
+version = "0.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34939e61f621c1ab37830d2832fbb158d10ccace7e8b3ca1383e3af9546b9569"
 
 [[package]]
 name = "toml"

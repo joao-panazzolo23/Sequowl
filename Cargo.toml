@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.104"
 slint = "1.17.1"
+tokio-async = "0.0.0"
 
 [build-dependencies]
 slint-build = "1.17.1"
